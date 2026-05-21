@@ -87,73 +87,15 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
   const notificationsRef = useRef<HTMLDivElement>(null)
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = useState(false)
-  const audioContextRef = useRef<AudioContext | null>(null)
 
-  useEffect(() => {
-    setMounted(true)
-    
-    // Resume context or set it up on early user interactions
-    const initAudio = () => {
-      if (!audioContextRef.current) {
-        const AudioCtx = window.AudioContext || (window as any).webkitAudioContext
-        if (AudioCtx) {
-          audioContextRef.current = new AudioCtx()
-        }
-      }
-      if (audioContextRef.current && audioContextRef.current.state === "suspended") {
-        audioContextRef.current.resume().catch(() => {})
-      }
-    }
+  useEffect(() => setMounted(true), [])
 
-    window.addEventListener("click", initAudio)
-    window.addEventListener("keydown", initAudio)
-    return () => {
-      window.removeEventListener("click", initAudio)
-      window.removeEventListener("keydown", initAudio)
-    }
-  }, [])
-
-  const playNotificationSound = () => {
-    try {
-      let ctx = audioContextRef.current
-      if (!ctx) {
-        const AudioCtx = window.AudioContext || (window as any).webkitAudioContext
-        if (!AudioCtx) return
-        ctx = new AudioCtx()
-        audioContextRef.current = ctx
-      }
-      if (ctx.state === "suspended") {
-        ctx.resume().catch(() => {})
-      }
-      const now = ctx.currentTime
-      
-      const osc = ctx.createOscillator()
-      const gain = ctx.createGain()
-      
-      osc.type = "sine"
-      osc.frequency.setValueAtTime(523.25, now) // C5
-      osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.15) // G5
-      
-      gain.gain.setValueAtTime(0.3, now) // Increased volume for better audibility
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.4)
-      
-      osc.connect(gain)
-      gain.connect(ctx.destination)
-      
-      osc.start(now)
-      osc.stop(now + 0.4)
-    } catch (e) {
-      console.warn("Audio Context playback error:", e)
-    }
-  }
-
-  // Simulate new notification and play sound chime after 10 seconds of mount
+  // Simulate new notification after 10 seconds of mount
   useEffect(() => {
     const timer = setTimeout(() => {
       setNotifications(prev => {
         if (prev.some(n => n.id === "simulated")) return prev
         
-        playNotificationSound()
         
         return [
           {
@@ -310,22 +252,14 @@ export default function DoctorLayout({ children }: { children: React.ReactNode }
                         </span>
                       )}
                     </div>
-                    <div className="flex items-center gap-3">
+                    {notifications.length > 0 && (
                       <button
-                        onClick={playNotificationSound}
-                        className="text-[11px] font-medium text-muted-foreground hover:text-purple-600 dark:hover:text-purple-400 hover:underline transition-all"
+                        onClick={markAllAsRead}
+                        className="text-[11px] font-medium text-purple-600 dark:text-purple-400 hover:underline transition-all"
                       >
-                        Test Chime
+                        Mark all as read
                       </button>
-                      {notifications.length > 0 && (
-                        <button
-                          onClick={markAllAsRead}
-                          className="text-[11px] font-medium text-purple-600 dark:text-purple-400 hover:underline transition-all"
-                        >
-                          Mark all as read
-                        </button>
-                      )}
-                    </div>
+                    )}
                   </div>
 
                   {/* List */}
