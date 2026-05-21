@@ -122,33 +122,33 @@ export default function PatientCasesPage() {
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
-      case "high": return "text-red-400 bg-red-500/20 border-red-500/30"
-      case "medium": return "text-yellow-400 bg-yellow-500/20 border-yellow-500/30"
-      default: return "text-green-400 bg-green-500/20 border-green-500/30"
+      case "high": return "text-red-600 dark:text-red-400 bg-red-500/15 border-red-500/30"
+      case "medium": return "text-amber-600 dark:text-amber-400 bg-amber-500/15 border-amber-500/30"
+      default: return "text-green-600 dark:text-green-400 bg-green-500/15 border-green-500/30"
     }
   }
 
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "unread": return <div className="h-2 w-2 rounded-full bg-pink-500 animate-pulse" />
-      case "read": return <Eye className="h-4 w-4 text-blue-400" />
-      default: return <CheckCircle className="h-4 w-4 text-green-400" />
+      case "read": return <Eye className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+      default: return <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
     }
   }
 
   return (
-    <div className="min-h-screen bg-black pb-8">
+    <div className="pb-8">
       <div className="mx-auto max-w-6xl px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="mb-2 text-3xl font-bold text-white">Patient Cases</h1>
-          <p className="text-gray-400">Review anonymized patient cases with AI-generated insights</p>
+          <h1 className="mb-2 text-3xl font-bold text-foreground">Patient Cases</h1>
+          <p className="text-muted-foreground">Review anonymized patient cases with AI-generated insights</p>
         </div>
 
         {/* Privacy Notice */}
         <div className="mb-6 flex items-center gap-3 rounded-2xl border border-purple-500/30 bg-purple-500/10 px-5 py-3">
-          <Brain className="h-5 w-5 text-purple-400" />
-          <span className="text-sm text-purple-400">
+          <Brain className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+          <span className="text-sm text-purple-600 dark:text-purple-400">
             All cases are anonymized. Patient identities are protected through our federated system.
           </span>
         </div>
@@ -156,13 +156,13 @@ export default function PatientCasesPage() {
         {/* Search & Filters */}
         <div className="mb-6 flex flex-col gap-4 md:flex-row">
           <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500" />
+            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="text"
               placeholder="Search by patient ID or condition..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-12 rounded-xl border-white/10 bg-white/5 pl-12 text-white placeholder:text-gray-500"
+              className="h-12 rounded-xl border-border bg-muted/50 pl-12 text-foreground placeholder:text-muted-foreground"
             />
           </div>
           <div className="flex gap-2 overflow-x-auto pb-2">
@@ -172,8 +172,8 @@ export default function PatientCasesPage() {
                 onClick={() => setSelectedFilter(option)}
                 className={`shrink-0 rounded-xl px-4 py-2 text-sm font-medium transition-all ${
                   selectedFilter === option
-                    ? "bg-purple-500 text-white"
-                    : "border border-white/10 bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white"
+                    ? "bg-purple-600 text-white dark:bg-purple-500"
+                    : "border border-border bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
                 }`}
               >
                 {option}
@@ -184,21 +184,21 @@ export default function PatientCasesPage() {
 
         {/* Stats */}
         <div className="mb-6 grid grid-cols-4 gap-4">
-          <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4 text-center">
-            <p className="text-2xl font-bold text-white">{patientCases.filter(c => c.status === "unread").length}</p>
-            <p className="text-sm text-gray-400">Unread</p>
+          <div className="rounded-xl border border-border bg-card p-4 text-center shadow-sm">
+            <p className="text-2xl font-bold text-foreground">{patientCases.filter(c => c.status === "unread").length}</p>
+            <p className="text-sm text-muted-foreground">Unread</p>
           </div>
-          <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-center">
-            <p className="text-2xl font-bold text-red-400">{patientCases.filter(c => c.risk === "high").length}</p>
-            <p className="text-sm text-gray-400">High Risk</p>
+          <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-center shadow-sm">
+            <p className="text-2xl font-bold text-red-600 dark:text-red-400">{patientCases.filter(c => c.risk === "high").length}</p>
+            <p className="text-sm text-muted-foreground">High Risk</p>
           </div>
-          <div className="rounded-xl border border-yellow-500/30 bg-yellow-500/10 p-4 text-center">
-            <p className="text-2xl font-bold text-yellow-400">{patientCases.filter(c => c.risk === "medium").length}</p>
-            <p className="text-sm text-gray-400">Medium Risk</p>
+          <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-center shadow-sm">
+            <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">{patientCases.filter(c => c.risk === "medium").length}</p>
+            <p className="text-sm text-muted-foreground">Medium Risk</p>
           </div>
-          <div className="rounded-xl border border-green-500/30 bg-green-500/10 p-4 text-center">
-            <p className="text-2xl font-bold text-green-400">{patientCases.filter(c => c.risk === "low").length}</p>
-            <p className="text-sm text-gray-400">Low Risk</p>
+          <div className="rounded-xl border border-green-500/30 bg-green-500/10 p-4 text-center shadow-sm">
+            <p className="text-2xl font-bold text-green-600 dark:text-green-400">{patientCases.filter(c => c.risk === "low").length}</p>
+            <p className="text-sm text-muted-foreground">Low Risk</p>
           </div>
         </div>
 
@@ -208,27 +208,27 @@ export default function PatientCasesPage() {
             <button
               key={caseItem.id}
               onClick={() => router.push(`/doctor-dashboard/cases/${caseItem.id}`)}
-              className={`w-full rounded-3xl border bg-white/[0.02] p-6 text-left backdrop-blur-xl transition-all hover:bg-white/5 ${
-                caseItem.status === "unread" ? "border-purple-500/30" : "border-white/10"
+              className={`w-full rounded-3xl border bg-card p-6 text-left transition-all hover:bg-muted shadow-sm ${
+                caseItem.status === "unread" ? "border-purple-500/30" : "border-border"
               }`}
             >
               <div className="flex items-start justify-between gap-4">
                 <div className="flex items-start gap-4">
                   <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500/20 to-indigo-500/20">
-                    <span className="text-lg font-bold text-purple-400">#{caseItem.id.slice(-2)}</span>
+                    <span className="text-lg font-bold text-purple-600 dark:text-purple-400">#{caseItem.id.slice(-2)}</span>
                   </div>
                   <div>
                     <div className="mb-1 flex items-center gap-3">
-                      <h3 className="font-semibold text-white">Patient #{caseItem.id}</h3>
+                      <h3 className="font-semibold text-foreground">Patient #{caseItem.id}</h3>
                       {getStatusIcon(caseItem.status)}
                       <span className={`rounded-full border px-3 py-0.5 text-xs font-medium ${getRiskColor(caseItem.risk)}`}>
                         {caseItem.risk.charAt(0).toUpperCase() + caseItem.risk.slice(1)} Risk
                       </span>
                     </div>
-                    <p className="mb-2 text-gray-400">{caseItem.condition}</p>
+                    <p className="mb-2 text-muted-foreground">{caseItem.condition}</p>
                     <div className="flex flex-wrap gap-2">
                       {caseItem.biomarkers.map((marker, i) => (
-                        <span key={i} className="rounded-lg bg-white/5 px-2 py-1 text-xs text-gray-400">
+                        <span key={i} className="rounded-lg bg-muted px-2 py-1 text-xs text-muted-foreground">
                           {marker}
                         </span>
                       ))}
@@ -238,14 +238,14 @@ export default function PatientCasesPage() {
 
                 <div className="flex flex-col items-end gap-2">
                   <div className="flex items-center gap-2">
-                    <Activity className="h-4 w-4 text-purple-400" />
-                    <span className="text-sm text-purple-400">{caseItem.aiConfidence}% AI Confidence</span>
+                    <Activity className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                    <span className="text-sm text-purple-600 dark:text-purple-400">{caseItem.aiConfidence}% AI Confidence</span>
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-gray-500">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <FileText className="h-3 w-3" />
                     {caseItem.reports} reports
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-gray-500">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Clock className="h-3 w-3" />
                     {caseItem.date}
                   </div>
@@ -256,8 +256,8 @@ export default function PatientCasesPage() {
         </div>
 
         {filteredCases.length === 0 && (
-          <div className="rounded-3xl border border-white/10 bg-white/[0.02] p-12 text-center backdrop-blur-xl">
-            <p className="text-gray-400">No cases found matching your criteria</p>
+          <div className="rounded-3xl border border-border bg-card p-12 text-center shadow-sm">
+            <p className="text-muted-foreground">No cases found matching your criteria</p>
           </div>
         )}
       </div>

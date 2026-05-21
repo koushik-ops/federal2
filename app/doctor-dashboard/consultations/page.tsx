@@ -100,33 +100,35 @@ export default function ConsultationsPage() {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "video": return <Video className="h-4 w-4 text-blue-400" />
-      case "in-person": return <User className="h-4 w-4 text-green-400" />
-      default: return <MessageSquare className="h-4 w-4 text-purple-400" />
+      case "video": return <Video className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+      case "in-person": return <User className="h-4 w-4 text-green-600 dark:text-green-400" />
+      default: return <MessageSquare className="h-4 w-4 text-purple-600 dark:text-purple-400" />
     }
   }
 
   return (
-    <div className="min-h-screen bg-black pb-8">
+    <div className="pb-8">
       <div className="mx-auto max-w-6xl px-4 py-8">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="mb-2 text-3xl font-bold text-white">Consultations</h1>
-            <p className="text-gray-400">Manage appointments, referrals, and partner hospital communications</p>
+            <h1 className="mb-2 text-3xl font-bold text-foreground">Consultations</h1>
+            <p className="text-muted-foreground">Manage appointments, referrals, and partner hospital communications</p>
           </div>
-          <Button className="bg-gradient-to-r from-purple-500 to-indigo-500">
+          <Button className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white">
             <Plus className="mr-2 h-4 w-4" />
             New Consultation
           </Button>
         </div>
 
         {/* Tabs */}
-        <div className="mb-6 flex gap-2 border-b border-white/10 pb-4">
+        <div className="mb-6 flex gap-2 border-b border-border pb-4">
           <button
             onClick={() => setActiveTab("schedule")}
             className={`flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-all ${
-              activeTab === "schedule" ? "bg-purple-500 text-white" : "text-gray-400 hover:text-white"
+              activeTab === "schedule" 
+                ? "bg-purple-600 text-white dark:bg-purple-500 shadow-sm" 
+                : "border border-border bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
             }`}
           >
             <Calendar className="h-4 w-4" />
@@ -135,7 +137,9 @@ export default function ConsultationsPage() {
           <button
             onClick={() => setActiveTab("referrals")}
             className={`flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-all ${
-              activeTab === "referrals" ? "bg-purple-500 text-white" : "text-gray-400 hover:text-white"
+              activeTab === "referrals" 
+                ? "bg-purple-600 text-white dark:bg-purple-500 shadow-sm" 
+                : "border border-border bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
             }`}
           >
             <User className="h-4 w-4" />
@@ -144,7 +148,9 @@ export default function ConsultationsPage() {
           <button
             onClick={() => setActiveTab("partners")}
             className={`flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-all ${
-              activeTab === "partners" ? "bg-purple-500 text-white" : "text-gray-400 hover:text-white"
+              activeTab === "partners" 
+                ? "bg-purple-600 text-white dark:bg-purple-500 shadow-sm" 
+                : "border border-border bg-muted/40 text-muted-foreground hover:bg-muted hover:text-foreground"
             }`}
           >
             <Building2 className="h-4 w-4" />
@@ -157,13 +163,13 @@ export default function ConsultationsPage() {
             {/* Search */}
             <div className="mb-6">
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500" />
+                <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   type="text"
                   placeholder="Search consultations..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="h-12 rounded-xl border-white/10 bg-white/5 pl-12 text-white placeholder:text-gray-500"
+                  className="h-12 rounded-xl border-border bg-muted/50 pl-12 text-foreground placeholder:text-muted-foreground"
                 />
               </div>
             </div>
@@ -173,30 +179,30 @@ export default function ConsultationsPage() {
               {consultations.map((consult) => (
                 <div 
                   key={consult.id}
-                  className={`rounded-3xl border bg-white/[0.02] p-6 backdrop-blur-xl transition-all hover:bg-white/5 ${
-                    consult.status === "upcoming" ? "border-purple-500/30" : "border-white/10"
+                  className={`rounded-3xl border bg-card p-6 shadow-sm transition-all hover:bg-muted/50 ${
+                    consult.status === "upcoming" ? "border-purple-500/30" : "border-border"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className={`flex h-14 w-14 items-center justify-center rounded-2xl ${
-                        consult.type === "video" ? "bg-blue-500/20" :
-                        consult.type === "in-person" ? "bg-green-500/20" :
-                        "bg-purple-500/20"
+                      <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${
+                        consult.type === "video" ? "bg-blue-500/15" :
+                        consult.type === "in-person" ? "bg-green-500/15" :
+                        "bg-purple-500/15"
                       }`}>
                         {getTypeIcon(consult.type)}
                       </div>
                       <div>
                         <div className="flex items-center gap-3">
-                          <h3 className="font-semibold text-white">{consult.patient}</h3>
+                          <h3 className="font-semibold text-foreground">{consult.patient}</h3>
                           {consult.status === "upcoming" && (
-                            <span className="rounded-full bg-purple-500/20 px-2 py-0.5 text-xs text-purple-400">
+                            <span className="rounded-full bg-purple-500/15 px-2 py-0.5 text-xs text-purple-600 dark:text-purple-400 font-medium">
                               Upcoming
                             </span>
                           )}
                         </div>
-                        <p className="text-sm text-purple-400">{consult.specialty}</p>
-                        <div className="mt-1 flex items-center gap-4 text-xs text-gray-500">
+                        <p className="text-sm text-purple-600 dark:text-purple-400 font-medium">{consult.specialty}</p>
+                        <div className="mt-1 flex items-center gap-4 text-xs text-muted-foreground">
                           <span className="flex items-center gap-1">
                             <Clock className="h-3 w-3" />
                             {consult.time}
@@ -210,11 +216,11 @@ export default function ConsultationsPage() {
                     </div>
                     <div className="flex gap-2">
                       {consult.status === "upcoming" && (
-                        <Button className="bg-gradient-to-r from-purple-500 to-indigo-500">
+                        <Button className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white">
                           {consult.type === "video" ? "Join Call" : "Start Session"}
                         </Button>
                       )}
-                      <Button variant="outline" className="border-white/10 text-gray-400 hover:text-white">
+                      <Button variant="outline">
                         Details
                       </Button>
                     </div>
@@ -230,33 +236,33 @@ export default function ConsultationsPage() {
             {specialistReferrals.map((referral) => (
               <div 
                 key={referral.id}
-                className="rounded-3xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-xl"
+                className="rounded-3xl border border-border bg-card p-6 shadow-sm"
               >
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="mb-2 flex items-center gap-3">
-                      <h3 className="font-semibold text-white">{referral.patient}</h3>
-                      <span className={`rounded-full px-2 py-0.5 text-xs ${
+                      <h3 className="font-semibold text-foreground">{referral.patient}</h3>
+                      <span className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${
                         referral.status === "pending" 
-                          ? "bg-yellow-500/20 text-yellow-400" 
-                          : "bg-green-500/20 text-green-400"
+                          ? "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30" 
+                          : "bg-green-500/15 text-green-600 dark:text-green-400 border-green-500/30"
                       }`}>
                         {referral.status.charAt(0).toUpperCase() + referral.status.slice(1)}
                       </span>
                     </div>
-                    <div className="mb-3 flex items-center gap-2 text-sm text-gray-400">
+                    <div className="mb-3 flex items-center gap-2 text-sm text-muted-foreground">
                       <span>{referral.fromDoctor || `${doctorName} (General)`}</span>
                       <ChevronRight className="h-4 w-4" />
-                      <span className="text-purple-400">{referral.toDoctor}</span>
+                      <span className="text-purple-600 dark:text-purple-400 font-medium">{referral.toDoctor}</span>
                     </div>
-                    <p className="text-sm text-gray-500">{referral.reason}</p>
+                    <p className="text-sm text-muted-foreground">{referral.reason}</p>
                   </div>
                   <div className="flex gap-2">
-                    <Button variant="outline" className="border-white/10 text-gray-400 hover:text-white">
+                    <Button variant="outline">
                       View Case
                     </Button>
                     {referral.status === "pending" && (
-                      <Button className="bg-gradient-to-r from-purple-500 to-indigo-500">
+                      <Button className="bg-gradient-to-r from-purple-500 to-indigo-500 text-white">
                         Accept Referral
                       </Button>
                     )}
@@ -270,9 +276,9 @@ export default function ConsultationsPage() {
         {activeTab === "partners" && (
           <>
             {/* Privacy Notice */}
-            <div className="mb-6 flex items-center gap-3 rounded-2xl border border-green-500/30 bg-green-500/10 px-5 py-3">
-              <Building2 className="h-5 w-5 text-green-400" />
-              <span className="text-sm text-green-400">
+            <div className="mb-6 flex items-center gap-3 rounded-2xl border border-green-500/30 bg-green-500/10 dark:bg-green-500/15 px-5 py-3">
+              <Building2 className="h-5 w-5 text-green-600 dark:text-green-400" />
+              <span className="text-sm text-green-600 dark:text-green-400">
                 Federated network - Only aggregated insights are shared. No patient data leaves hospital premises.
               </span>
             </div>
@@ -281,35 +287,35 @@ export default function ConsultationsPage() {
               {hospitalPartners.map((hospital, i) => (
                 <div 
                   key={i}
-                  className="rounded-3xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-xl"
+                  className="rounded-3xl border border-border bg-card p-6 shadow-sm"
                 >
                   <div className="mb-4 flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/20">
-                        <Building2 className="h-6 w-6 text-purple-400" />
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/15">
+                        <Building2 className="h-6 w-6 text-purple-600 dark:text-purple-400" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-white">{hospital.name}</h3>
-                        <p className="text-sm text-gray-400">{hospital.location}</p>
+                        <h3 className="font-semibold text-foreground">{hospital.name}</h3>
+                        <p className="text-sm text-muted-foreground">{hospital.location}</p>
                       </div>
                     </div>
-                    <div className={`flex items-center gap-2 rounded-full px-3 py-1 text-xs ${
+                    <div className={`flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium ${
                       hospital.status === "active" 
-                        ? "bg-green-500/20 text-green-400" 
-                        : "bg-yellow-500/20 text-yellow-400"
+                        ? "bg-green-500/15 text-green-600 dark:text-green-400 border-green-500/30" 
+                        : "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/30"
                     }`}>
                       <div className={`h-2 w-2 rounded-full ${
-                        hospital.status === "active" ? "bg-green-500 animate-pulse" : "bg-yellow-500"
+                        hospital.status === "active" ? "bg-green-500 dark:bg-green-400 animate-pulse" : "bg-amber-500 dark:bg-amber-400"
                       }`} />
                       {hospital.status === "active" ? "Connected" : "Syncing"}
                     </div>
                   </div>
-                  <div className="flex items-center justify-between border-t border-white/10 pt-4">
+                  <div className="flex items-center justify-between border-t border-border pt-4">
                     <div>
-                      <p className="text-2xl font-bold text-white">{hospital.patients}</p>
-                      <p className="text-xs text-gray-500">Shared insights</p>
+                      <p className="text-2xl font-bold text-foreground">{hospital.patients}</p>
+                      <p className="text-xs text-muted-foreground">Shared insights</p>
                     </div>
-                    <Button variant="outline" size="sm" className="border-white/10 text-gray-400 hover:text-white">
+                    <Button variant="outline" size="sm">
                       View Insights
                     </Button>
                   </div>

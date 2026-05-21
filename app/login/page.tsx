@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -17,7 +17,7 @@ import {
   HeartPulse,
 } from "lucide-react"
 
-export default function MultiRoleAuthPage() {
+function MultiRoleAuthContent() {
   const searchParams = useSearchParams()
   const roleFromUrl = searchParams.get("role") as "patient" | "doctor" | "admin" | null
   
@@ -419,5 +419,13 @@ export default function MultiRoleAuthPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function MultiRoleAuthPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center text-white">Loading...</div>}>
+      <MultiRoleAuthContent />
+    </Suspense>
   )
 }
