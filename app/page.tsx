@@ -33,12 +33,22 @@ export default function LandingPage() {
   if (phase === "intro") {
     return (
       <div className={`relative min-h-screen w-full overflow-hidden bg-black transition-opacity duration-500 ${fadeOut ? "opacity-0" : "opacity-100"}`}>
+        {/* Rotating DNA Backdrop Fallback */}
+        <div className="absolute inset-0 overflow-hidden opacity-30">
+          <img
+            src="/download.jpeg"
+            alt="Rotating DNA Helix Background"
+            className="rotating-bg absolute left-1/2 top-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 object-cover"
+          />
+        </div>
+
         {/* Video Background */}
         <video
           autoPlay
           loop
           muted
           playsInline
+          poster="/download.jpeg"
           className="absolute inset-0 h-full w-full object-cover"
         >
           <source
@@ -126,12 +136,22 @@ export default function LandingPage() {
   // Portal Selection Phase
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-black">
+      {/* Rotating DNA Backdrop Fallback */}
+      <div className="absolute inset-0 overflow-hidden opacity-25">
+        <img
+          src="/download.jpeg"
+          alt="Rotating DNA Helix Background"
+          className="rotating-bg absolute left-1/2 top-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 object-cover"
+        />
+      </div>
+
       {/* Video Background */}
       <video
         autoPlay
         loop
         muted
         playsInline
+        poster="/download.jpeg"
         className="absolute inset-0 h-full w-full object-cover opacity-40"
       >
         <source

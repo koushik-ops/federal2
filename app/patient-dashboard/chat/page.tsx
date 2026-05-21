@@ -117,37 +117,37 @@ export default function ChatDoctorPage() {
   }
 
   return (
-    <div className="flex h-[calc(100vh-64px)] flex-col bg-black md:h-[calc(100vh-64px)]">
+    <div className="flex h-[calc(100vh-64px)] flex-col bg-background text-foreground transition-colors duration-300 md:h-[calc(100vh-64px)]">
       {/* Header */}
-      <div className="border-b border-white/10 bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-transparent px-4 py-4">
+      <div className="border-b border-border bg-gradient-to-r from-pink-500/10 via-purple-500/10 to-transparent px-4 py-4">
         <div className="mx-auto flex max-w-4xl items-center justify-between">
           <div className="flex items-center gap-4">
             <div className="relative">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-r from-pink-500 to-purple-500">
                 <Sparkles className="h-6 w-6 text-white" />
               </div>
-              <div className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 border-black bg-green-500" />
+              <div className="absolute -bottom-1 -right-1 h-4 w-4 rounded-full border-2 border-background bg-green-500" />
             </div>
             <div>
-              <h1 className="text-xl font-semibold text-white">PulseKin Doc</h1>
-              <p className="text-sm text-green-400">Powered by MedGemma AI</p>
+              <h1 className="text-xl font-semibold text-foreground">PulseKin Doc</h1>
+              <p className="text-sm text-green-600 dark:text-green-400">Powered by MedGemma AI</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/10 px-4 py-2">
-            <Shield className="h-4 w-4 text-green-400" />
-            <span className="text-sm text-green-400">End-to-End Encrypted</span>
+          <div className="flex items-center gap-2 rounded-full border border-green-500/30 bg-green-500/5 dark:bg-green-500/10 px-4 py-2">
+            <Shield className="h-4 w-4 text-green-600 dark:text-green-400" />
+            <span className="text-sm text-green-600 dark:text-green-400">End-to-End Encrypted</span>
           </div>
         </div>
       </div>
 
       {/* Symptom History Bar */}
       {symptomHistory.length > 0 && (
-        <div className="border-b border-white/10 bg-white/[0.02] px-4 py-2">
+        <div className="border-b border-border bg-muted/30 px-4 py-2">
           <div className="mx-auto flex max-w-4xl items-center gap-2">
-            <span className="text-xs text-gray-500">Tracking:</span>
+            <span className="text-xs text-muted-foreground/80">Tracking:</span>
             <div className="flex flex-wrap gap-2">
               {symptomHistory.map((symptom, i) => (
-                <span key={i} className="rounded-full bg-pink-500/20 px-3 py-1 text-xs text-pink-400">
+                <span key={i} className="rounded-full bg-pink-500/15 px-3 py-1 text-xs text-pink-600 dark:text-pink-400 font-medium">
                   {symptom}
                 </span>
               ))}
@@ -164,18 +164,18 @@ export default function ChatDoctorPage() {
               <div className={`flex max-w-[85%] gap-3 ${message.role === "user" ? "flex-row-reverse" : ""}`}>
                 <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
                   message.role === "user" 
-                    ? "bg-gradient-to-r from-orange-500 to-pink-500" 
-                    : "bg-gradient-to-r from-pink-500 to-purple-500"
+                  ? "bg-gradient-to-r from-orange-500 to-pink-500" 
+                  : "bg-gradient-to-r from-pink-500 to-purple-500"
                 }`}>
                   {message.role === "user" ? <User className="h-5 w-5 text-white" /> : <Bot className="h-5 w-5 text-white" />}
                 </div>
                 <div className={`rounded-2xl px-5 py-4 ${
                   message.role === "user"
                     ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white"
-                    : "bg-white/10 text-gray-200"
+                    : "bg-muted text-foreground"
                 }`}>
                   <p className="whitespace-pre-line text-sm leading-relaxed">{message.text}</p>
-                  <p className={`mt-2 text-xs ${message.role === "user" ? "text-white/60" : "text-gray-500"}`}>
+                  <p className={`mt-2 text-xs ${message.role === "user" ? "text-white/80" : "text-muted-foreground/75"}`}>
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </p>
                 </div>
@@ -189,11 +189,11 @@ export default function ChatDoctorPage() {
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-r from-pink-500 to-purple-500">
                   <Bot className="h-5 w-5 text-white" />
                 </div>
-                <div className="rounded-2xl bg-white/10 px-5 py-4">
+                <div className="rounded-2xl bg-muted px-5 py-4">
                   <div className="flex gap-1">
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-pink-400 [animation-delay:-0.3s]" />
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-purple-400 [animation-delay:-0.15s]" />
-                    <span className="h-2 w-2 animate-bounce rounded-full bg-orange-400" />
+                    <span className="h-2 w-2 animate-bounce rounded-full bg-pink-500/60 [animation-delay:-0.3s]" />
+                    <span className="h-2 w-2 animate-bounce rounded-full bg-purple-500/60 [animation-delay:-0.15s]" />
+                    <span className="h-2 w-2 animate-bounce rounded-full bg-orange-500/60" />
                   </div>
                 </div>
               </div>
@@ -205,15 +205,15 @@ export default function ChatDoctorPage() {
       </div>
 
       {/* Quick Prompts */}
-      <div className="border-t border-white/10 bg-white/[0.02] px-4 py-3">
+      <div className="border-t border-border bg-muted/30 px-4 py-3">
         <div className="mx-auto max-w-4xl">
-          <div className="mb-2 text-xs text-gray-500">Quick prompts:</div>
+          <div className="mb-2 text-xs text-muted-foreground/80">Quick prompts:</div>
           <div className="flex flex-wrap gap-2">
             {quickPrompts.map((prompt, i) => (
               <button
                 key={i}
                 onClick={() => handleQuickPrompt(prompt)}
-                className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-gray-300 transition-all hover:border-pink-500/50 hover:bg-pink-500/10 hover:text-pink-400"
+                className="rounded-full border border-border bg-background px-4 py-2 text-sm text-foreground transition-all hover:border-pink-500/50 hover:bg-muted hover:text-pink-600 dark:hover:text-pink-400"
               >
                 {prompt}
               </button>
@@ -223,10 +223,10 @@ export default function ChatDoctorPage() {
       </div>
 
       {/* Input Area */}
-      <div className="border-t border-white/10 bg-black px-4 py-4 pb-24 md:pb-4">
+      <div className="border-t border-border bg-background px-4 py-4 pb-24 md:pb-4">
         <form onSubmit={handleSubmit} className="mx-auto max-w-4xl">
-          <div className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-2">
-            <button type="button" className="rounded-xl p-2 text-gray-400 transition-colors hover:bg-white/10 hover:text-white">
+          <div className="flex items-center gap-3 rounded-2xl border border-border bg-muted/50 px-4 py-2">
+            <button type="button" className="rounded-xl p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
               <Paperclip className="h-5 w-5" />
             </button>
             <input
@@ -234,20 +234,20 @@ export default function ChatDoctorPage() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Describe your symptoms..."
-              className="flex-1 bg-transparent text-white placeholder:text-gray-500 focus:outline-none"
+              className="flex-1 bg-transparent text-foreground placeholder:text-muted-foreground/80 focus:outline-none"
             />
-            <button type="button" className="rounded-xl p-2 text-gray-400 transition-colors hover:bg-white/10 hover:text-white">
+            <button type="button" className="rounded-xl p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground">
               <Mic className="h-5 w-5" />
             </button>
             <Button 
               type="submit" 
               disabled={!input.trim() || isTyping}
-              className="rounded-xl bg-gradient-to-r from-pink-500 to-purple-500 px-6"
+              className="rounded-xl bg-gradient-to-r from-pink-500 to-purple-500 text-white px-6"
             >
               <Send className="h-5 w-5" />
             </Button>
           </div>
-          <p className="mt-2 text-center text-xs text-gray-500">
+          <p className="mt-2 text-center text-xs text-muted-foreground/75">
             AI responses are for informational purposes only. Always consult a healthcare professional.
           </p>
         </form>

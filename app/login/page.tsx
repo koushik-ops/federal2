@@ -129,12 +129,26 @@ function MultiRoleAuthContent() {
         }
       `}</style>
 
-      {/* ROTATING BACKGROUND */}
+      {/* VIDEO BACKGROUND WITH ROTATING BACKDROP FALLBACK */}
       <div className="absolute inset-0 overflow-hidden">
-        <img
-          alt="Background"
-          className="rotating-bg absolute left-1/2 top-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 object-cover opacity-80"
-        />
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          poster="/download.jpeg"
+          className="absolute inset-0 h-full w-full object-cover opacity-70"
+        >
+          <source src="/back.mp4" type="video/mp4" />
+        </video>
+        {/* Fallback rotating DNA in case video fails or is loading */}
+        <div className="absolute inset-0 -z-10 bg-black">
+          <img
+            src="/download.jpeg"
+            alt="Background Fallback"
+            className="rotating-bg absolute left-1/2 top-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 object-cover opacity-40"
+          />
+        </div>
       </div>
 
       {/* OVERLAYS */}

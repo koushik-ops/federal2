@@ -234,3 +234,22 @@
 .gradient-button-alt {
   background: linear-gradient(208deg, #721ec6 0%, rgb(231, 223, 239) 100%);
 }
+
+/* Rotating Background */
+@keyframes rotateBg {
+  0% {
+    transform: scale(1.1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.18) rotate(180deg);
+  }
+  100% {
+    transform: scale(1.1) rotate(360deg);
+  }
+}
+
+.rotating-bg {
+  animation: rotateBg 70s linear infinite;
+  transform-origin: center;
+}
+

@@ -116,22 +116,22 @@ export default function PatientHomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-black pb-24 md:pb-8">
+    <div className="min-h-screen bg-background text-foreground pb-24 md:pb-8">
       <div className="mx-auto max-w-6xl px-4 py-8">
         {/* Privacy Badge */}
         <div className="mb-8 flex items-center justify-center">
           <div className="flex items-center gap-3 rounded-full border border-green-500/30 bg-green-500/10 px-5 py-2">
-            <Shield className="h-4 w-4 text-green-400" />
-            <span className="text-sm text-green-400">Privacy Protected using Federated AI</span>
+            <Shield className="h-4 w-4 text-green-600 dark:text-green-400" />
+            <span className="text-sm text-green-600 dark:text-green-400">Privacy Protected using Federated AI</span>
             <div className="h-2 w-2 animate-pulse rounded-full bg-green-500" />
           </div>
         </div>
 
         {/* Main Upload Section */}
-        <div className="mb-8 rounded-3xl border border-white/10 bg-gradient-to-br from-pink-500/5 via-purple-500/5 to-transparent p-8 backdrop-blur-xl">
+        <div className="mb-8 rounded-3xl border border-border bg-gradient-to-br from-pink-500/5 via-purple-500/5 to-transparent p-8 backdrop-blur-xl">
           <div className="mb-6 text-center">
-            <h1 className="mb-2 text-3xl font-bold text-white">Upload Your Medical Reports</h1>
-            <p className="text-gray-400">Upload reports, scans, prescriptions for AI-powered health analysis</p>
+            <h1 className="mb-2 text-3xl font-bold text-foreground">Upload Your Medical Reports</h1>
+            <p className="text-muted-foreground">Upload reports, scans, prescriptions for AI-powered health analysis</p>
           </div>
 
           {/* Drop Zone */}
@@ -143,7 +143,7 @@ export default function PatientHomePage() {
             className={`group relative cursor-pointer rounded-2xl border-2 border-dashed p-12 text-center transition-all ${
               isDragging
                 ? "border-pink-500 bg-pink-500/10"
-                : "border-white/20 hover:border-pink-500/50 hover:bg-white/5"
+                : "border-border hover:border-pink-500/50 hover:bg-muted/50"
             }`}
           >
             <input
@@ -156,15 +156,15 @@ export default function PatientHomePage() {
             />
             <div className="mb-4 flex justify-center">
               <div className={`rounded-2xl p-4 transition-all ${
-                isDragging ? "bg-pink-500/20" : "bg-white/5 group-hover:bg-pink-500/10"
+                isDragging ? "bg-pink-500/20" : "bg-muted group-hover:bg-pink-500/10"
               }`}>
-                <Upload className={`h-10 w-10 ${isDragging ? "text-pink-400" : "text-gray-400 group-hover:text-pink-400"}`} />
+                <Upload className={`h-10 w-10 ${isDragging ? "text-pink-400" : "text-muted-foreground group-hover:text-pink-400"}`} />
               </div>
             </div>
-            <p className="mb-2 text-lg font-medium text-white">
+            <p className="mb-2 text-lg font-medium text-foreground">
               {isDragging ? "Drop files here" : "Drag & drop your files here"}
             </p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-muted-foreground/80">
               or click to browse - PDF, DOCX, Images supported
             </p>
           </div>
@@ -172,25 +172,25 @@ export default function PatientHomePage() {
           {/* Selected Files */}
           {files.length > 0 && (
             <div className="mt-6 space-y-3">
-              <h3 className="text-sm font-medium text-gray-400">Selected Files ({files.length})</h3>
+              <h3 className="text-sm font-medium text-muted-foreground">Selected Files ({files.length})</h3>
               <div className="space-y-2">
                 {files.map((file, index) => (
                   <div
                     key={index}
-                    className="flex items-center justify-between rounded-xl border border-white/10 bg-white/5 px-4 py-3"
+                    className="flex items-center justify-between rounded-xl border border-border bg-muted/50 px-4 py-3"
                   >
                     <div className="flex items-center gap-3">
                       <div className="rounded-lg bg-pink-500/20 p-2 text-pink-400">
                         {getFileIcon(file)}
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-white">{file.name}</p>
-                        <p className="text-xs text-gray-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                        <p className="text-sm font-medium text-foreground">{file.name}</p>
+                        <p className="text-xs text-muted-foreground/80">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
                       </div>
                     </div>
                     <button
                       onClick={(e) => { e.stopPropagation(); removeFile(index) }}
-                      className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-white/10 hover:text-white"
+                      className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                     >
                       <X className="h-4 w-4" />
                     </button>
@@ -204,8 +204,8 @@ export default function PatientHomePage() {
           {isUploading && (
             <div className="mt-6">
               <div className="mb-2 flex items-center justify-between text-sm">
-                <span className="text-gray-400">Processing files...</span>
-                <span className="text-pink-400">{uploadProgress}%</span>
+                <span className="text-muted-foreground">Processing files...</span>
+                <span className="text-pink-500 dark:text-pink-400 font-semibold">{uploadProgress}%</span>
               </div>
               <Progress value={uploadProgress} className="h-2" />
             </div>
@@ -225,10 +225,10 @@ export default function PatientHomePage() {
         </div>
 
         {/* Recent Reports Section */}
-        <div className="rounded-3xl border border-white/10 bg-white/[0.02] p-6 backdrop-blur-xl">
+        <div className="rounded-3xl border border-border bg-card p-6 backdrop-blur-xl">
           <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-white">Recent Reports</h2>
-            <Button variant="ghost" className="text-pink-400 hover:text-pink-300" onClick={() => router.push("/patient-dashboard/reports")}>
+            <h2 className="text-xl font-semibold text-foreground">Recent Reports</h2>
+            <Button variant="ghost" className="text-pink-600 hover:text-pink-500 dark:text-pink-400 dark:hover:text-pink-300" onClick={() => router.push("/patient-dashboard/reports")}>
               View All
               <ChevronRight className="ml-1 h-4 w-4" />
             </Button>
@@ -239,15 +239,15 @@ export default function PatientHomePage() {
               <button
                 key={report.id}
                 onClick={() => router.push(`/patient-dashboard/reports/${report.id}`)}
-                className="flex w-full items-center justify-between rounded-xl border border-white/5 bg-white/[0.02] px-4 py-4 transition-all hover:border-pink-500/30 hover:bg-white/5"
+                className="flex w-full items-center justify-between rounded-xl border border-border/50 bg-muted/30 px-4 py-4 transition-all hover:border-pink-500/30 hover:bg-muted"
               >
                 <div className="flex items-center gap-4">
                   <div className="rounded-xl bg-pink-500/10 p-3">
-                    <FileText className="h-5 w-5 text-pink-400" />
+                    <FileText className="h-5 w-5 text-pink-500 dark:text-pink-400" />
                   </div>
                   <div className="text-left">
-                    <p className="font-medium text-white">{report.name}</p>
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <p className="font-medium text-foreground">{report.name}</p>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground/80">
                       <Clock className="h-3 w-3" />
                       {report.date}
                     </div>
@@ -256,19 +256,19 @@ export default function PatientHomePage() {
                 <div className="flex items-center gap-3">
                   {report.status === "analyzed" && report.risk && (
                     <span className={`rounded-full px-3 py-1 text-xs font-medium ${
-                      report.risk === "low" ? "bg-green-500/20 text-green-400" :
-                      report.risk === "medium" ? "bg-yellow-500/20 text-yellow-400" :
-                      "bg-red-500/20 text-red-400"
+                      report.risk === "low" ? "bg-green-500/15 text-green-600 dark:text-green-400" :
+                      report.risk === "medium" ? "bg-yellow-500/15 text-yellow-600 dark:text-yellow-400" :
+                      "bg-red-500/15 text-red-600 dark:text-red-400"
                     }`}>
                       {report.risk.charAt(0).toUpperCase() + report.risk.slice(1)} Risk
                     </span>
                   )}
                   {report.status === "pending" && (
-                    <span className="rounded-full bg-gray-500/20 px-3 py-1 text-xs font-medium text-gray-400">
+                    <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
                       Pending
                     </span>
                   )}
-                  <ChevronRight className="h-5 w-5 text-gray-500" />
+                  <ChevronRight className="h-5 w-5 text-muted-foreground" />
                 </div>
               </button>
             ))}
@@ -280,18 +280,18 @@ export default function PatientHomePage() {
       {showChatbot && (
         <div className="fixed bottom-20 right-4 z-50 md:bottom-4">
           {/* Chat Window */}
-          <div className="mb-4 hidden w-80 overflow-hidden rounded-2xl border border-white/10 bg-black/95 shadow-2xl backdrop-blur-xl peer-checked:block" id="chatWindow">
-            <div className="flex items-center justify-between border-b border-white/10 bg-gradient-to-r from-pink-500/20 to-purple-500/20 px-4 py-3">
+          <div className="mb-4 hidden w-80 overflow-hidden rounded-2xl border border-border bg-popover shadow-2xl backdrop-blur-xl peer-checked:block" id="chatWindow">
+            <div className="flex items-center justify-between border-b border-border bg-gradient-to-r from-pink-500/10 to-purple-500/10 px-4 py-3">
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-pink-500 to-purple-500">
                     <MessageSquare className="h-5 w-5 text-white" />
                   </div>
-                  <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-black bg-green-500" />
+                  <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-background bg-green-500" />
                 </div>
                 <div>
-                  <p className="font-medium text-white">PulseKin Doc</p>
-                  <p className="text-xs text-green-400">Online</p>
+                  <p className="font-medium text-foreground">PulseKin Doc</p>
+                  <p className="text-xs text-green-600 dark:text-green-400">Online</p>
                 </div>
               </div>
               <button 
@@ -299,7 +299,7 @@ export default function PatientHomePage() {
                   const el = document.getElementById("chatWindow")
                   if (el) el.classList.toggle("hidden")
                 }}
-                className="rounded-lg p-1 text-gray-400 hover:bg-white/10 hover:text-white"
+                className="rounded-lg p-1 text-muted-foreground hover:bg-muted"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -311,7 +311,7 @@ export default function PatientHomePage() {
                   <div className={`max-w-[85%] rounded-2xl px-4 py-2 ${
                     msg.role === "user" 
                       ? "bg-gradient-to-r from-pink-500 to-purple-500 text-white" 
-                      : "bg-white/10 text-gray-200"
+                      : "bg-muted text-foreground"
                   }`}>
                     <p className="text-sm">{msg.text}</p>
                   </div>
@@ -320,16 +320,16 @@ export default function PatientHomePage() {
               <div ref={chatEndRef} />
             </div>
 
-            <form onSubmit={handleChatSubmit} className="border-t border-white/10 p-3">
+            <form onSubmit={handleChatSubmit} className="border-t border-border p-3">
               <div className="flex gap-2">
                 <input
                   type="text"
                   value={chatInput}
                   onChange={(e) => setChatInput(e.target.value)}
                   placeholder="Describe your symptoms..."
-                  className="flex-1 rounded-xl border-0 bg-white/10 px-4 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  className="flex-1 rounded-xl border border-border bg-muted/50 px-4 py-2 text-sm text-foreground placeholder:text-muted-foreground/80 focus:outline-none focus:ring-2 focus:ring-pink-500"
                 />
-                <Button type="submit" size="sm" className="rounded-xl bg-gradient-to-r from-pink-500 to-purple-500">
+                <Button type="submit" size="sm" className="rounded-xl bg-gradient-to-r from-pink-500 to-purple-500 text-white">
                   <Send className="h-4 w-4" />
                 </Button>
               </div>

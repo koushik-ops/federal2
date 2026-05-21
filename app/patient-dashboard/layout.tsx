@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { 
   Home, 
   FileText, 
@@ -12,11 +12,26 @@ import {
   LogOut,
   Menu,
   X,
-  Bell
+  Bell,
+  ChevronDown,
+  Sun,
+  Moon,
+  CheckCircle2,
+  AlertCircle,
+  Trash2
 } from "lucide-react"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { useState, useRef, useEffect } from "react"
+import { useTheme } from "next-themes"
 import { useUser } from "@/lib/user-context"
+
+interface Notification {
+  id: string
+  title: string
+  description: string
+  time: string
+  read: boolean
+  type: 'info' | 'warning' | 'success' | 'alert'
+}
 
 const navItems = [
   { href: "/patient-dashboard", label: "Home", icon: Home },
@@ -24,22 +39,147 @@ const navItems = [
   { href: "/patient-dashboard/chat", label: "AI Doctor", icon: MessageSquare },
   { href: "/patient-dashboard/doctors", label: "Nearby Doctors", icon: MapPin },
   { href: "/patient-dashboard/prescriptions", label: "Prescriptions", icon: Pill },
-  { href: "/patient-dashboard/profile", label: "Profile", icon: User },
 ]
 
 export default function PatientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const { logout } = useUser()
+  const [profileOpen, setProfileOpen] = useState(false)
+  const [notificationsOpen, setNotificationsOpen] = useState(false)
+  const [notifications, setNotifications] = useState<Notification[]>([
+    {
+      id: "1",
+      title: "AI Analysis Complete",
+      description: "Your recent lipid panel report analysis has been completed.",
+      time: "5m ago",
+      read: false,
+      type: "success"
+    },
+    {
+      id: "2",
+      title: "Medication Reminder",
+      description: "It's time to take Lisinopril 10mg.",
+      time: "45m ago",
+      read: false,
+      type: "warning"
+    },
+    {
+      id: "3",
+      title: "Appointment Confirmed",
+      description: "Dr. Sarah Mitchell confirmed your slot for May 24th at 10:00 AM.",
+      time: "2h ago",
+      read: true,
+      type: "info"
+    },
+    {
+      id: "4",
+      title: "Monthly Health Score",
+      description: "Your health score improved by 4 points. Keep it up!",
+      time: "1d ago",
+      read: true,
+      type: "success"
+    }
+  ])
+  const { user, logout } = useUser()
+  const router = useRouter()
+  const profileRef = useRef<HTMLDivElement>(null)
+  const notificationsRef = useRef<HTMLDivElement>(null)
+  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => setMounted(true), [])
+
+  const playNotificationSound = () => {
+    try {
+      const AudioContext = window.AudioContext || (window as any).webkitAudioContext
+      if (!AudioContext) return
+      const ctx = new AudioContext()
+      const now = ctx.currentTime
+      
+      const osc = ctx.createOscillator()
+      const gain = ctx.createGain()
+      
+      osc.type = "sine"
+      osc.frequency.setValueAtTime(587.33, now) // D5
+      osc.frequency.exponentialRampToValueAtTime(880, now + 0.15) // A5
+      
+      gain.gain.setValueAtTime(0.12, now)
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3)
+      
+      osc.connect(gain)
+      gain.connect(ctx.destination)
+      
+      osc.start(now)
+      osc.stop(now + 0.3)
+    } catch (e) {
+      console.warn("Audio Context playback error:", e)
+    }
+  }
+
+  // Simulate new notification and play sound chime after 10 seconds of mount
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setNotifications(prev => {
+        if (prev.some(n => n.id === "simulated")) return prev
+        
+        playNotificationSound()
+        
+        return [
+          {
+            id: "simulated",
+            title: "New AI Recommendation",
+            description: "Based on your activity logs, we recommend scheduling an ECG review.",
+            time: "Just now",
+            read: false,
+            type: "warning"
+          },
+          ...prev
+        ]
+      })
+    }, 10000)
+    return () => clearTimeout(timer)
+  }, [])
+
+  // Close dropdowns on outside click
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+        setProfileOpen(false)
+      }
+      if (notificationsRef.current && !notificationsRef.current.contains(e.target as Node)) {
+        setNotificationsOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClick)
+    return () => document.removeEventListener("mousedown", handleClick)
+  }, [])
+
+  const markAsRead = (id: string) => {
+    setNotifications(prev => 
+      prev.map(n => n.id === id ? { ...n, read: true } : n)
+    )
+  }
+
+  const markAllAsRead = () => {
+    setNotifications(prev => 
+      prev.map(n => ({ ...n, read: true }))
+    )
+  }
+
+  const clearNotification = (id: string) => {
+    setNotifications(prev => prev.filter(n => n.id !== id))
+  }
+
+  const unreadCount = notifications.filter(n => !n.read).length
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       {/* Header */}
-      <header className="fixed left-0 right-0 top-0 z-50 border-b border-white/10 bg-black/80 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
+      <header className="fixed left-0 right-0 top-0 z-50 border-b border-border bg-background/90 backdrop-blur-xl transition-colors duration-300">
+        <div className="mx-auto flex h-16 max-w-7xl items-center px-4 lg:px-6">
           {/* Logo */}
-          <Link href="/patient-dashboard" className="flex items-center gap-3">
-            <div className="relative h-10 w-10">
+          <Link href="/patient-dashboard" className="flex shrink-0 items-center gap-2.5">
+            <div className="relative h-9 w-9 flex-shrink-0">
               <svg viewBox="0 0 48 48" className="h-full w-full">
                 <defs>
                   <linearGradient id="headerPulseGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -59,11 +199,19 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
                 <circle cx="24" cy="24" r="20" stroke="url(#headerPulseGrad)" strokeWidth="2" fill="none" opacity="0.3" />
               </svg>
             </div>
-            <span className="font-serif text-xl font-bold italic text-white">PulseKin</span>
+            <div className="hidden items-baseline gap-1.5 sm:flex">
+              <span className="font-serif text-lg font-bold italic text-foreground">PulseKin</span>
+              <span className="rounded-md bg-pink-500/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-pink-500 dark:text-pink-400">
+                Patient
+              </span>
+            </div>
           </Link>
 
+          {/* Spacer */}
+          <div className="flex-1" />
+
           {/* Desktop Navigation */}
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="hidden items-center gap-0.5 rounded-2xl border border-border bg-muted/50 p-1 md:flex">
             {navItems.map((item) => {
               const isActive = pathname === item.href || 
                 (item.href !== "/patient-dashboard" && pathname.startsWith(item.href))
@@ -71,33 +219,197 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-all ${
+                  className={`flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-[13px] font-medium transition-all ${
                     isActive
-                      ? "bg-pink-500/20 text-pink-400"
-                      : "text-gray-400 hover:bg-white/5 hover:text-white"
+                      ? "bg-pink-500/15 text-pink-600 shadow-sm dark:bg-pink-500/20 dark:text-pink-300"
+                      : "text-muted-foreground hover:bg-accent hover:text-foreground"
                   }`}
                 >
-                  <item.icon className="h-4 w-4" />
+                  <item.icon className="h-3.5 w-3.5" />
                   {item.label}
                 </Link>
               )
             })}
           </nav>
 
-          {/* Right side actions */}
-          <div className="flex items-center gap-3">
-            <button className="relative rounded-xl p-2 text-gray-400 transition-colors hover:bg-white/5 hover:text-white">
-              <Bell className="h-5 w-5" />
-              <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-pink-500" />
-            </button>
-            <Link href="/login" onClick={() => logout()}>
-              <Button variant="ghost" size="sm" className="hidden text-gray-400 hover:text-white md:flex">
-                <LogOut className="mr-2 h-4 w-4" />
-                Logout
-              </Button>
-            </Link>
+          {/* Spacer */}
+          <div className="flex-1" />
+
+          {/* Right side */}
+          <div className="flex shrink-0 items-center gap-1">
+            {/* Theme toggle */}
+            {mounted && (
+              <button
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className="rounded-xl p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                aria-label="Toggle theme"
+              >
+                {theme === "dark" ? (
+                  <Sun className="h-[18px] w-[18px]" />
+                ) : (
+                  <Moon className="h-[18px] w-[18px]" />
+                )}
+              </button>
+            )}
+
+            {/* Notifications */}
+            <div ref={notificationsRef} className="relative">
+              <button 
+                onClick={() => setNotificationsOpen(!notificationsOpen)}
+                className="relative rounded-xl p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                aria-label="View notifications"
+              >
+                <Bell className="h-[18px] w-[18px]" />
+                {unreadCount > 0 && (
+                  <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-pink-500 text-[9px] font-bold text-white ring-2 ring-background">
+                    {unreadCount}
+                  </span>
+                )}
+              </button>
+
+              {notificationsOpen && (
+                <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 overflow-hidden rounded-2xl border border-border bg-popover/95 backdrop-blur-xl shadow-2xl shadow-black/10 dark:shadow-black/50 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                  {/* Header */}
+                  <div className="flex items-center justify-between border-b border-border px-4 py-3 bg-muted/30">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-semibold text-foreground">Notifications</span>
+                      {unreadCount > 0 && (
+                        <span className="rounded-full bg-pink-500/10 px-2 py-0.5 text-[10px] font-semibold text-pink-600 dark:text-pink-400">
+                          {unreadCount} new
+                        </span>
+                      )}
+                    </div>
+                    {notifications.length > 0 && (
+                      <button
+                        onClick={markAllAsRead}
+                        className="text-[11px] font-medium text-pink-600 dark:text-pink-400 hover:underline transition-all"
+                      >
+                        Mark all as read
+                      </button>
+                    )}
+                  </div>
+
+                  {/* List */}
+                  <div className="max-h-[350px] overflow-y-auto divide-y divide-border">
+                    {notifications.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center py-10 px-4 text-center">
+                        <div className="mb-3 rounded-full bg-muted p-3 text-muted-foreground">
+                          <Bell className="h-6 w-6" />
+                        </div>
+                        <p className="text-sm font-medium text-foreground">All caught up!</p>
+                        <p className="text-xs text-muted-foreground mt-1">No new notifications at the moment.</p>
+                      </div>
+                    ) : (
+                      notifications.map((n) => {
+                        let Icon = Bell
+                        let iconColor = "text-blue-500 bg-blue-500/10"
+                        if (n.type === 'success') {
+                          Icon = CheckCircle2
+                          iconColor = "text-emerald-500 bg-emerald-500/10"
+                        } else if (n.type === 'warning') {
+                          Icon = Pill
+                          iconColor = "text-amber-500 bg-amber-500/10"
+                        } else if (n.type === 'alert') {
+                          Icon = AlertCircle
+                          iconColor = "text-rose-500 bg-rose-500/10"
+                        }
+
+                        return (
+                          <div 
+                            key={n.id} 
+                            onClick={() => markAsRead(n.id)}
+                            className={`group relative flex gap-3 p-4 text-left transition-colors hover:bg-muted/50 cursor-pointer ${
+                              !n.read ? "bg-pink-500/[0.02] dark:bg-pink-500/[0.03]" : ""
+                            }`}
+                          >
+                            {/* Unread dot */}
+                            {!n.read && (
+                              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 h-1.5 w-1.5 rounded-full bg-pink-500" />
+                            )}
+                            
+                            {/* Icon */}
+                            <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${iconColor}`}>
+                              <Icon className="h-4 w-4" />
+                            </div>
+
+                            {/* Content */}
+                            <div className="flex-1 min-w-0 pr-4">
+                              <div className="flex items-start justify-between gap-1">
+                                <p className={`text-xs font-semibold truncate ${!n.read ? "text-foreground font-bold" : "text-muted-foreground"}`}>
+                                  {n.title}
+                                </p>
+                                <span className="text-[10px] text-muted-foreground shrink-0 mt-0.5">{n.time}</span>
+                              </div>
+                              <p className="text-xs text-muted-foreground line-clamp-2 mt-1 leading-relaxed">
+                                {n.description}
+                              </p>
+                            </div>
+
+                            {/* Dismiss Button */}
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                clearNotification(n.id)
+                              }}
+                              className="absolute right-2 top-3.5 rounded-lg p-1 text-muted-foreground opacity-0 hover:bg-accent hover:text-foreground group-hover:opacity-100 transition-opacity"
+                              aria-label="Clear notification"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+                        )
+                      })
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Profile dropdown */}
+            <div ref={profileRef} className="relative">
+              <button
+                onClick={() => setProfileOpen(!profileOpen)}
+                className="flex items-center gap-2 rounded-xl px-2 py-1.5 transition-colors hover:bg-accent"
+              >
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-pink-500 to-purple-500 text-xs font-bold text-white shadow-sm">
+                  {(user?.name || "P").charAt(0).toUpperCase()}
+                </div>
+                <span className="hidden max-w-[120px] truncate text-sm text-muted-foreground md:block">
+                  {user?.name || "Patient"}
+                </span>
+                <ChevronDown className={`hidden h-3.5 w-3.5 text-muted-foreground transition-transform md:block ${profileOpen ? "rotate-180" : ""}`} />
+              </button>
+
+              {profileOpen && (
+                <div className="absolute right-0 top-full mt-2 w-56 overflow-hidden rounded-2xl border border-border bg-popover shadow-2xl shadow-black/10 dark:shadow-black/50">
+                  <div className="border-b border-border px-4 py-3">
+                    <p className="text-sm font-medium text-foreground">{user?.name || "Patient"}</p>
+                    <p className="text-xs text-muted-foreground">{user?.email || "patient@pulsekin.com"}</p>
+                  </div>
+                  <div className="p-1.5">
+                    <Link
+                      href="/patient-dashboard/profile"
+                      onClick={() => setProfileOpen(false)}
+                      className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                    >
+                      <User className="h-4 w-4" />
+                      View Profile
+                    </Link>
+                    <button
+                      onClick={() => { logout(); router.push("/") }}
+                      className="flex w-full items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-red-500/10 hover:text-red-500 dark:hover:text-red-400"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Mobile menu toggle */}
             <button
-              className="rounded-xl p-2 text-gray-400 transition-colors hover:bg-white/5 hover:text-white md:hidden"
+              className="rounded-xl p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground md:hidden"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -107,7 +419,7 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="border-t border-white/10 bg-black/95 backdrop-blur-xl md:hidden">
+          <div className="border-t border-border bg-background/95 backdrop-blur-xl md:hidden">
             <nav className="mx-auto max-w-7xl space-y-1 p-4">
               {navItems.map((item) => {
                 const isActive = pathname === item.href || 
@@ -119,8 +431,8 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
                     onClick={() => setMobileMenuOpen(false)}
                     className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-all ${
                       isActive
-                        ? "bg-pink-500/20 text-pink-400"
-                        : "text-gray-400 hover:bg-white/5 hover:text-white"
+                        ? "bg-pink-500/15 text-pink-600 dark:bg-pink-500/20 dark:text-pink-400"
+                        : "text-muted-foreground hover:bg-accent hover:text-foreground"
                     }`}
                   >
                     <item.icon className="h-5 w-5" />
@@ -129,12 +441,20 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
                 )
               })}
               <Link
-                href="/login"
-                className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-400 hover:bg-white/5 hover:text-white"
+                href="/patient-dashboard/profile"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground"
+              >
+                <User className="h-5 w-5" />
+                Profile
+              </Link>
+              <button
+                onClick={() => { logout(); setMobileMenuOpen(false); router.push("/") }}
+                className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground"
               >
                 <LogOut className="h-5 w-5" />
                 Logout
-              </Link>
+              </button>
             </nav>
           </div>
         )}
@@ -146,9 +466,9 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
       </main>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-black/90 backdrop-blur-xl md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/90 backdrop-blur-xl md:hidden">
         <div className="flex items-center justify-around py-2">
-          {navItems.slice(0, 5).map((item) => {
+          {navItems.map((item) => {
             const isActive = pathname === item.href || 
               (item.href !== "/patient-dashboard" && pathname.startsWith(item.href))
             return (
@@ -156,7 +476,7 @@ export default function PatientLayout({ children }: { children: React.ReactNode 
                 key={item.href}
                 href={item.href}
                 className={`flex flex-col items-center gap-1 rounded-xl px-3 py-2 transition-all ${
-                  isActive ? "text-pink-400" : "text-gray-500"
+                  isActive ? "text-pink-500 dark:text-pink-400" : "text-muted-foreground"
                 }`}
               >
                 <item.icon className="h-5 w-5" />
