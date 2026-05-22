@@ -45,6 +45,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     setUser(null)
     localStorage.removeItem("pulsekin_user")
+    localStorage.removeItem("pulsekin_token")
   }
 
   return (

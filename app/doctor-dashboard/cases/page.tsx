@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { 
   Search, 
@@ -105,9 +105,65 @@ const filterOptions = ["All", "Unread", "High Risk", "Medium Risk", "Low Risk"]
 export default function PatientCasesPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedFilter, setSelectedFilter] = useState("All")
+  const [cases, setCases] = useState(patientCases)
+  const [loading, setLoading] = useState(true)
   const router = useRouter()
 
-  const filteredCases = patientCases.filter(caseItem => {
+  useEffect(() => {
+    async function fetchCases() {
+      try {
+        const token = localStorage.getItem("pulsekin_token")
+        if (!token) {
+          console.warn("No pulsekin_token found in localStorage")
+          setLoading(false)
+          return
+        }
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
+        const res = await fetch(`${apiUrl}/api/patient-queue`, {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        })
+        if (res.ok) {
+          const data = await res.json()
+          if (data && data.patients) {
+            const backendCases = data.patients.map((p: any) => {
+              let risk = "low"
+              if (p.risk_score > 0.7) risk = "high"
+              else if (p.risk_score > 0.4) risk = "medium"
+
+              return {
+                id: p.anonymous_id,
+                risk: risk,
+                condition: p.condition || "AI General Intake",
+                status: p.status === "Intake Pending" ? "unread" : "read",
+                date: "Recent",
+                aiConfidence: Math.round(p.risk_score * 100),
+                biomarkers: p.is_intake ? ["AppointReady Intake"] : ["AI Vitals"],
+                reports: 0
+              }
+            })
+
+            // Merge and de-duplicate by ID
+            const combined = [...backendCases]
+            patientCases.forEach(mockCase => {
+              if (!combined.some(c => c.id === mockCase.id)) {
+                combined.push(mockCase)
+              }
+            })
+            setCases(combined)
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching patient queue:", err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchCases()
+  }, [])
+
+  const filteredCases = cases.filter(caseItem => {
     const matchesSearch = caseItem.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
                          caseItem.condition.toLowerCase().includes(searchQuery.toLowerCase())
     
@@ -185,19 +241,19 @@ export default function PatientCasesPage() {
         {/* Stats */}
         <div className="mb-6 grid grid-cols-4 gap-4">
           <div className="rounded-xl border border-border bg-card p-4 text-center shadow-sm">
-            <p className="text-2xl font-bold text-foreground">{patientCases.filter(c => c.status === "unread").length}</p>
+            <p className="text-2xl font-bold text-foreground">{cases.filter(c => c.status === "unread").length}</p>
             <p className="text-sm text-muted-foreground">Unread</p>
           </div>
           <div className="rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-center shadow-sm">
-            <p className="text-2xl font-bold text-red-600 dark:text-red-400">{patientCases.filter(c => c.risk === "high").length}</p>
+            <p className="text-2xl font-bold text-red-600 dark:text-red-400">{cases.filter(c => c.risk === "high").length}</p>
             <p className="text-sm text-muted-foreground">High Risk</p>
           </div>
           <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 p-4 text-center shadow-sm">
-            <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">{patientCases.filter(c => c.risk === "medium").length}</p>
+            <p className="text-2xl font-bold text-amber-600 dark:text-amber-400">{cases.filter(c => c.risk === "medium").length}</p>
             <p className="text-sm text-muted-foreground">Medium Risk</p>
           </div>
           <div className="rounded-xl border border-green-500/30 bg-green-500/10 p-4 text-center shadow-sm">
-            <p className="text-2xl font-bold text-green-600 dark:text-green-400">{patientCases.filter(c => c.risk === "low").length}</p>
+            <p className="text-2xl font-bold text-green-600 dark:text-green-400">{cases.filter(c => c.risk === "low").length}</p>
             <p className="text-sm text-muted-foreground">Low Risk</p>
           </div>
         </div>

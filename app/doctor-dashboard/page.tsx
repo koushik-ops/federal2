@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { 
   Users, 
@@ -19,19 +19,15 @@ import {
 import { Button } from "@/components/ui/button"
 import { useUser } from "@/lib/user-context"
 
-const stats = [
-  { label: "Pending Cases", value: "12", change: "+3 today", icon: Users, color: "yellow" },
-  { label: "Analyzed Reports", value: "48", change: "+8 this week", icon: FileText, color: "green" },
-  { label: "Consultations", value: "24", change: "5 scheduled", icon: Video, color: "blue" },
-  { label: "Federated Insights", value: "156", change: "from 8 hospitals", icon: Building2, color: "purple" },
-]
-
-const recentCases = [
+const patientCases = [
   { id: "A0047", risk: "high", condition: "Suspected Diabetes Type 2", status: "unread", date: "2 hours ago" },
   { id: "A0046", risk: "medium", condition: "Hypertension Monitoring", status: "read", date: "4 hours ago" },
   { id: "A0045", risk: "low", condition: "Routine Checkup", status: "reviewed", date: "Yesterday" },
   { id: "A0044", risk: "high", condition: "Cardiac Irregularity", status: "unread", date: "Yesterday" },
   { id: "A0043", risk: "medium", condition: "Thyroid Panel Review", status: "read", date: "2 days ago" },
+  { id: "A0042", risk: "low", condition: "Post-Treatment Follow-up", status: "reviewed", date: "2 days ago" },
+  { id: "A0041", risk: "high", condition: "Renal Function Concern", status: "unread", date: "3 days ago" },
+  { id: "A0040", risk: "medium", condition: "Lipid Profile Abnormality", status: "read", date: "3 days ago" },
 ]
 
 const upcomingConsultations = [
@@ -43,6 +39,68 @@ const upcomingConsultations = [
 export default function DoctorDashboard() {
   const router = useRouter()
   const { user } = useUser()
+  const [cases, setCases] = useState<any[]>(patientCases)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchCases() {
+      try {
+        const token = localStorage.getItem("pulsekin_token")
+        if (!token) {
+          console.warn("No pulsekin_token found in localStorage")
+          setLoading(false)
+          return
+        }
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
+        const res = await fetch(`${apiUrl}/api/patient-queue`, {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        })
+        if (res.ok) {
+          const data = await res.json()
+          if (data && data.patients) {
+            const backendCases = data.patients.map((p: any) => {
+              let risk = "low"
+              if (p.risk_score > 0.7) risk = "high"
+              else if (p.risk_score > 0.4) risk = "medium"
+
+              return {
+                id: p.anonymous_id,
+                risk: risk,
+                condition: p.condition || "AI General Intake",
+                status: p.status === "Intake Pending" ? "unread" : "read",
+                date: "Recent"
+              }
+            })
+
+            // Merge and de-duplicate by ID
+            const combined = [...backendCases]
+            patientCases.forEach(mockCase => {
+              if (!combined.some(c => c.id === mockCase.id)) {
+                combined.push(mockCase)
+              }
+            })
+            setCases(combined)
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching patient queue:", err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchCases()
+  }, [])
+
+  const pendingCount = cases.filter(c => c.status === "unread").length
+
+  const stats = [
+    { label: "Pending Cases", value: pendingCount.toString(), change: `+${cases.filter(c => c.status === "unread" && c.date === "Recent").length} today`, icon: Users, color: "yellow" },
+    { label: "Analyzed Reports", value: "48", change: "+8 this week", icon: FileText, color: "green" },
+    { label: "Consultations", value: "24", change: "5 scheduled", icon: Video, color: "blue" },
+    { label: "Federated Insights", value: "156", change: "from 8 hospitals", icon: Building2, color: "purple" },
+  ]
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
@@ -66,7 +124,7 @@ export default function DoctorDashboard() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="mb-2 text-3xl font-bold text-foreground">Clinical Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back, {user?.name || "Doctor"}. You have 12 pending cases to review.</p>
+          <p className="text-muted-foreground">Welcome back, {user?.name || "Doctor"}. You have {pendingCount} pending cases to review.</p>
         </div>
 
         {/* Privacy Notice */}
@@ -122,7 +180,8 @@ export default function DoctorDashboard() {
               </div>
 
               <div className="space-y-3">
-                {recentCases.map((caseItem) => (
+                {cases.slice(0, 5).map((caseItem) => (
+
                   <button
                     key={caseItem.id}
                     onClick={() => router.push(`/doctor-dashboard/cases/${caseItem.id}`)}

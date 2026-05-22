@@ -210,6 +210,29 @@ function MultiRoleAuthContent() {
         return
       }
 
+      // Capture the doctor JWT token from the backend
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
+        const res = await fetch(`${apiUrl}/api/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            role: "doctor",
+            hospital_id: cleanHospitalCode,
+            doctor_id: cleanLicenseId,
+            password: cleanPassword
+          })
+        })
+        if (res.ok) {
+          const data = await res.json()
+          if (data.token) {
+            localStorage.setItem("pulsekin_token", data.token)
+          }
+        }
+      } catch (err) {
+        console.error("Failed to retrieve doctor token:", err)
+      }
+
       // Redirect directly to dashboard without delay
       login({
         name: docName,
@@ -224,6 +247,29 @@ function MultiRoleAuthContent() {
     const displayName = activeTab === "signup" && fullName
       ? fullName
       : email.split("@")[0] // fallback to email username for login
+
+    if (selectedRole === "patient") {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000"
+        const res = await fetch(`${apiUrl}/api/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            role: "patient",
+            email: email,
+            password: "demo123"
+          })
+        })
+        if (res.ok) {
+          const data = await res.json()
+          if (data.token) {
+            localStorage.setItem("pulsekin_token", data.token)
+          }
+        }
+      } catch (err) {
+        console.error("Failed to retrieve auth token:", err)
+      }
+    }
 
     // Store user info in context + localStorage
     login({

@@ -8,6 +8,7 @@ import {
   MessageSquare, 
   MapPin, 
   Pill, 
+  CalendarCheck,
   User, 
   LogOut,
   Menu,
@@ -39,6 +40,7 @@ const navItems = [
   { href: "/patient-dashboard/chat", label: "AI Doctor", icon: MessageSquare },
   { href: "/patient-dashboard/doctors", label: "Nearby Doctors", icon: MapPin },
   { href: "/patient-dashboard/prescriptions", label: "Prescriptions", icon: Pill },
+  { href: "/patient-dashboard/appoint-ready", label: "AppointReady", icon: CalendarCheck },
 ]
 
 export default function PatientLayout({ children }: { children: React.ReactNode }) {
