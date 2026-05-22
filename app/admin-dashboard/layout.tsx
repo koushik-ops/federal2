@@ -54,9 +54,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }, [])
 
   const adminNotifications = [
-    { id: "a1", title: "New Node Connected", desc: "Apollo Health Hub established handshake.", time: "4m ago", read: false },
+    { id: "a1", title: "New Node Connected", desc: "Narayana Health established handshake.", time: "4m ago", read: false },
     { id: "a2", title: "Aggregation Complete", desc: "Round 6 calculations resolved successfully.", time: "2h ago", read: false },
-    { id: "a3", title: "Low Accuracy Warning", desc: "Node PULSE-NODE-STJUDE reports local drift > 0.05.", time: "1d ago", read: true }
+    { id: "a3", title: "Low Accuracy Warning", desc: "Node PULSE-NODE-KOKILABEN reports local drift > 0.05.", time: "1d ago", read: true }
   ]
 
   return (

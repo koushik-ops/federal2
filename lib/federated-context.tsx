@@ -39,47 +39,47 @@ const FederatedContext = createContext<FederatedContextType | undefined>(undefin
 
 const DEFAULT_NODES: HospitalNode[] = [
   {
-    id: "PULSE-NODE-MAYO",
-    name: "Mayo Clinic Medical AI Center",
+    id: "PULSE-NODE-NH",
+    name: "Narayana Health",
     datasetSize: 14250,
     localAccuracy: 0.824,
     status: "idle",
     connected: true,
     lastSync: "2 hours ago",
-    location: "Rochester, MN",
+    location: "Karnataka",
     modelArchitecture: "MedGemma-7B-Dense"
   },
   {
-    id: "PULSE-NODE-JHU",
-    name: "Johns Hopkins Hospital Node",
+    id: "PULSE-NODE-ASTER",
+    name: "Aster CMI Hospital",
     datasetSize: 16800,
     localAccuracy: 0.836,
     status: "idle",
     connected: true,
     lastSync: "3 hours ago",
-    location: "Baltimore, MD",
+    location: "Karnataka",
     modelArchitecture: "MedGemma-7B-Dense"
   },
   {
-    id: "PULSE-NODE-STJUDE",
-    name: "St. Jude Pediatric Research AI",
+    id: "PULSE-NODE-KOKILABEN",
+    name: "Kokilaben Dhirubhai Ambani Hospital",
     datasetSize: 8450,
     localAccuracy: 0.812,
     status: "idle",
     connected: true,
     lastSync: "1 hour ago",
-    location: "Memphis, TN",
+    location: "Maharashtra",
     modelArchitecture: "MedGemma-7B-Dense"
   },
   {
-    id: "PULSE-NODE-APOLLO",
-    name: "Apollo Health Hub",
+    id: "PULSE-NODE-MEDANTA",
+    name: "Medanta – The Medicity",
     datasetSize: 11200,
     localAccuracy: 0.809,
     status: "idle",
     connected: true,
     lastSync: "4 hours ago",
-    location: "New Delhi, IN",
+    location: "Haryana",
     modelArchitecture: "MedGemma-7B-Dense"
   }
 ]

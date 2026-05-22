@@ -35,12 +35,14 @@ import {
 } from "recharts"
 
 const HOSPITAL_TEMPLATES = [
-  { name: "Mayo Clinic Medical AI Center", size: 14250, loc: "Rochester, MN", type: "MRI Scan Volumetric Data" },
-  { name: "Johns Hopkins Hospital Node", size: 16800, loc: "Baltimore, MD", type: "Chest X-Ray Imaging" },
-  { name: "St. Jude Pediatric Research AI", size: 8450, loc: "Memphis, TN", type: "Genomic Expression Patterns" },
-  { name: "Apollo Health Hub", size: 11200, loc: "New Delhi, IN", type: "ECG Waveform Sequences" },
-  { name: "Massachusetts General AI Node", size: 18100, loc: "Boston, MA", type: "EHR Clinical History Logs" },
-  { name: "Mount Sinai Genomics Lab", size: 13500, loc: "New York, NY", type: "WGS Variant Call Files" }
+  { name: "Narayana Health", size: 14250, loc: "Karnataka", type: "MRI Scan Volumetric Data" },
+  { name: "Aster CMI Hospital", size: 16800, loc: "Karnataka", type: "Chest X-Ray Imaging" },
+  { name: "Kokilaben Dhirubhai Ambani Hospital", size: 8450, loc: "Maharashtra", type: "Genomic Expression Patterns" },
+  { name: "Medanta – The Medicity", size: 11200, loc: "Haryana", type: "ECG Waveform Sequences" },
+  { name: "Artemis Hospital", size: 18100, loc: "Haryana", type: "EHR Clinical History Logs" },
+  { name: "AIIMS Delhi", size: 13500, loc: "Delhi", type: "WGS Variant Call Files" },
+  { name: "Fortis Memorial Research Institute", size: 15400, loc: "Haryana", type: "Cardiovascular MRI Scans" },
+  { name: "Christian Medical College (CMC)", size: 9800, loc: "Tamil Nadu", type: "CT Brain Images" }
 ]
 
 export default function HospitalDashboardPage() {

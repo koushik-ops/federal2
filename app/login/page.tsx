@@ -86,12 +86,12 @@ function MultiRoleAuthContent() {
       const cleanNodeId = nodeId.trim()
       const cleanToken = federationToken.trim()
 
-      if (cleanNodeId === "HSP-APL-2045" && cleanToken === "PKFED-APL-9921") {
-        hospitalName = "Apollo Hospital Node"
-      } else if (cleanNodeId === "HSP-MAN-8831" && cleanToken === "PKFED-MAN-1128") {
-        hospitalName = "Manipal Hospital Node"
-      } else if (cleanNodeId === "HSP-FRT-1192" && cleanToken === "PKFED-FRT-6621") {
-        hospitalName = "Fortis Healthcare Node"
+      if (cleanNodeId === "HSP-NH-2045" && cleanToken === "PKFED-NH-9921") {
+        hospitalName = "Narayana Health"
+      } else if (cleanNodeId === "HSP-ASTER-8831" && cleanToken === "PKFED-ASTER-1128") {
+        hospitalName = "Aster CMI Hospital"
+      } else if (cleanNodeId === "HSP-KDAH-1192" && cleanToken === "PKFED-KDAH-6621") {
+        hospitalName = "Kokilaben Dhirubhai Ambani Hospital"
       }
 
       if (!hospitalName) {
@@ -236,19 +236,19 @@ function MultiRoleAuthContent() {
     router.push("/patient-dashboard")
   }
 
-  const autofillDemoNode = (node: "apollo" | "manipal" | "fortis") => {
-    if (node === "apollo") {
-      setNodeId("HSP-APL-2045")
-      setFederationToken("PKFED-APL-9921")
-      setPassphrase("apollo-secure-node-key")
-    } else if (node === "manipal") {
-      setNodeId("HSP-MAN-8831")
-      setFederationToken("PKFED-MAN-1128")
-      setPassphrase("manipal-secure-node-key")
-    } else if (node === "fortis") {
-      setNodeId("HSP-FRT-1192")
-      setFederationToken("PKFED-FRT-6621")
-      setPassphrase("fortis-secure-node-key")
+  const autofillDemoNode = (node: "narayana" | "aster" | "kokilaben") => {
+    if (node === "narayana") {
+      setNodeId("HSP-NH-2045")
+      setFederationToken("PKFED-NH-9921")
+      setPassphrase("narayana-secure-node-key")
+    } else if (node === "aster") {
+      setNodeId("HSP-ASTER-8831")
+      setFederationToken("PKFED-ASTER-1128")
+      setPassphrase("aster-secure-node-key")
+    } else if (node === "kokilaben") {
+      setNodeId("HSP-KDAH-1192")
+      setFederationToken("PKFED-KDAH-6621")
+      setPassphrase("kokilaben-secure-node-key")
     }
   }
 
@@ -671,24 +671,25 @@ function MultiRoleAuthContent() {
                       <div className="grid grid-cols-3 gap-2">
                         <button
                           type="button"
-                          onClick={() => autofillDemoNode("apollo")}
+                          onClick={() => autofillDemoNode("narayana")}
                           className="text-[10px] py-1.5 px-2 rounded-lg border border-cyan-500/20 bg-cyan-500/5 text-cyan-400 hover:bg-cyan-500/15 hover:border-cyan-500/40 transition text-center cursor-pointer font-medium"
                         >
-                          Apollo Node
+                          Narayana
                         </button>
                         <button
                           type="button"
-                          onClick={() => autofillDemoNode("manipal")}
-                          className="text-[10px] py-1.5 px-2 rounded-lg border border-cyan-500/20 bg-cyan-500/5 text-cyan-400 hover:bg-cyan-500/15 hover:border-cyan-500/40 transition text-center cursor-pointer font-medium"
+                          onClick={() => autofillDemoNode("aster")}
+                          className="text-[10px] py-1.5 px-2 rounded-lg border border-cyan-500/20 bg-cyan-500/5 text-cyan-400 hover:bg-cyan-500/15 hover:border-cyan-500/40 transition text-center cursor-pointer font-medium font-semibold"
                         >
-                          Manipal Node
+                          Aster CMI
                         </button>
                         <button
                           type="button"
-                          onClick={() => autofillDemoNode("fortis")}
-                          className="text-[10px] py-1.5 px-2 rounded-lg border border-cyan-500/20 bg-cyan-500/5 text-cyan-400 hover:bg-cyan-500/15 hover:border-cyan-500/40 transition text-center cursor-pointer font-medium"
+                          onClick={() => autofillDemoNode("kokilaben")}
+                          className="text-[10px] py-1.5 px-2 rounded-lg border border-cyan-500/20 bg-cyan-500/5 text-cyan-400 hover:bg-cyan-500/15 hover:border-cyan-500/40 transition text-center cursor-pointer font-medium font-semibold truncate"
+                          title="Kokilaben Hospital"
                         >
-                          Fortis Node
+                          Kokilaben
                         </button>
                       </div>
                     </div>
