@@ -222,11 +222,11 @@ export default function LandingPage() {
             Choose Your Portal
           </h2>
 
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {/* Patient Portal */}
             <button
               onClick={() => router.push("/login?role=patient")}
-              className="group relative overflow-hidden rounded-3xl border border-pink-500/30 bg-gradient-to-br from-pink-500/10 to-purple-500/10 p-8 backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:border-pink-500/60 hover:shadow-[0_0_40px_rgba(236,72,153,0.3)] animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200"
+              className="group relative overflow-hidden rounded-3xl border border-pink-500/30 bg-gradient-to-br from-pink-500/10 to-purple-500/10 p-6 backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:border-pink-500/60 hover:shadow-[0_0_40px_rgba(236,72,153,0.3)] animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-pink-500/0 to-pink-500/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
               <div className="relative">
@@ -247,7 +247,7 @@ export default function LandingPage() {
             {/* Doctor Portal */}
             <button
               onClick={() => router.push("/login?role=doctor")}
-              className="group relative overflow-hidden rounded-3xl border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-indigo-500/10 p-8 backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:border-purple-500/60 hover:shadow-[0_0_40px_rgba(147,51,234,0.3)] animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300"
+              className="group relative overflow-hidden rounded-3xl border border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-indigo-500/10 p-6 backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:border-purple-500/60 hover:shadow-[0_0_40px_rgba(147,51,234,0.3)] animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-purple-500/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
               <div className="relative">
@@ -265,10 +265,31 @@ export default function LandingPage() {
               </div>
             </button>
 
+            {/* Hospital Portal */}
+            <button
+              onClick={() => router.push("/login?role=hospital")}
+              className="group relative overflow-hidden rounded-3xl border border-cyan-500/30 bg-gradient-to-br from-cyan-500/10 to-indigo-500/10 p-6 backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:border-cyan-500/60 hover:shadow-[0_0_40px_rgba(6,182,212,0.3)] animate-in fade-in slide-in-from-bottom-4 duration-700 delay-350"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-cyan-500/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+              <div className="relative">
+                <div className="mb-6 flex justify-center">
+                  <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-cyan-500/20">
+                    <svg className="h-10 w-10 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                  </div>
+                </div>
+                <h3 className="mb-3 text-center text-xl font-semibold text-white">Hospital Portal</h3>
+                <p className="text-center text-sm text-gray-400">
+                  Join the federated learning ecosystem, manage local AI training nodes, and securely sync model weights
+                </p>
+              </div>
+            </button>
+
             {/* Admin/Technician Portal */}
             <button
               onClick={() => router.push("/login?role=admin")}
-              className="group relative overflow-hidden rounded-3xl border border-orange-500/30 bg-gradient-to-br from-orange-500/10 to-amber-500/10 p-8 backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:border-orange-500/60 hover:shadow-[0_0_40px_rgba(249,115,22,0.3)] animate-in fade-in slide-in-from-bottom-4 duration-700 delay-400"
+              className="group relative overflow-hidden rounded-3xl border border-orange-500/30 bg-gradient-to-br from-orange-500/10 to-amber-500/10 p-6 backdrop-blur-xl transition-all duration-500 hover:scale-105 hover:border-orange-500/60 hover:shadow-[0_0_40px_rgba(249,115,22,0.3)] animate-in fade-in slide-in-from-bottom-4 duration-700 delay-400"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 to-orange-500/20 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
               <div className="relative">

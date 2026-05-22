@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react"
 
-export type UserRole = "patient" | "doctor" | "admin"
+export type UserRole = "patient" | "doctor" | "admin" | "hospital"
 
 interface UserInfo {
   name: string
