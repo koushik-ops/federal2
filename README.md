@@ -1,89 +1,269 @@
-# PulseKin: AI-Powered Healthcare Platform
+<div align="center">
 
-PulseKin is a premium, privacy-preserving, and federated AI healthcare platform designed to connect patients, doctors, and system administrators through a seamless, state-of-the-art interface. Built on Next.js 16 with Tailwind CSS, PulseKin features rich glassmorphism layouts, dynamic audio-synthesized notifications, real-time simulated AI diagnostics, and robust dashboard portals.
+<br/>
+
+```
+██████╗ ██╗   ██╗██╗     ███████╗███████╗██╗  ██╗██╗███╗   ██╗
+██╔══██╗██║   ██║██║     ██╔════╝██╔════╝██║ ██╔╝██║████╗  ██║
+██████╔╝██║   ██║██║     ███████╗█████╗  █████╔╝ ██║██╔██╗ ██║
+██╔═══╝ ██║   ██║██║     ╚════██║██╔══╝  ██╔═██╗ ██║██║╚██╗██║
+██║     ╚██████╔╝███████╗███████║███████╗██║  ██╗██║██║ ╚████║
+╚═╝      ╚═════╝ ╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝
+```
+
+### 🏥 Privacy-Preserving · Federated · AI-Powered Healthcare
+
+<br/>
+
+[![Next.js](https://img.shields.io/badge/Next.js-16.2.6-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![Flask](https://img.shields.io/badge/Flask-Backend-000000?style=for-the-badge&logo=flask)](https://flask.palletsprojects.com/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-DNN-EE4C2C?style=for-the-badge&logo=pytorch)](https://pytorch.org/)
+[![XGBoost](https://img.shields.io/badge/XGBoost-ML-189AB4?style=for-the-badge)](https://xgboost.readthedocs.io/)
+[![Groq](https://img.shields.io/badge/Groq-Llama_3.1-F55036?style=for-the-badge)](https://groq.com/)
+
+<br/>
+
+[![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000000?style=flat-square&logo=vercel)](https://vercel.com/)
+[![Railway](https://img.shields.io/badge/Backends_on-Railway-6441A4?style=flat-square&logo=railway)](https://railway.app/)
+[![Docker](https://img.shields.io/badge/Containerized-Docker-2496ED?style=flat-square&logo=docker)](https://www.docker.com/)
+[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
+
+</div>
 
 ---
 
-## 🚀 Key Features
+## 🌟 What is PulseKin?
 
-### 1. Interactive Landing Page
-* **Visual Experience**: Autoplaying background video overlays combined with smooth text animations highlighting the core philosophy: `YOU. MATTER.`
-* **Aesthetic Fallbacks**: Automatic, low-opacity rotating DNA helix graphics (`/download.jpeg`) that ensure premium visual continuity during buffering or asset load delays.
-* **Role Selection**: Easy, direct navigation gates for **Patient**, **Doctor**, and **Admin** portals.
+**PulseKin** is a premium, privacy-first, federated AI healthcare platform that brings together **patients**, **doctors**, and **administrators** under one intelligent, beautiful interface. Powered by cutting-edge machine learning and real-time AI, PulseKin delivers explainable diagnoses, conversational intake assistance, and zero-compromise data privacy — all in one seamless experience.
 
-### 2. Patient Dashboard
-* **AI Chat Assistant**: An interactive chat terminal to consult with virtual medical specialists.
-* **Health Prediction & Reports**: Upload and review diagnostic medical records.
-* **Specialist Directory**: Browse available doctors, specialties, and schedule visits.
-* **Prescriptions Tracking**: View active medication routines, dosages, and refill history.
-* **Dynamic Profiles**: Light-theme toggle support across patient profile dashboards.
+> *"Healthcare intelligence that respects your privacy."*
 
-### 3. Doctor Dashboard
-* **Case Management**: Priority-coded case views detailing patient vitals, diagnosis predictions, and AI feature explainability (SHAP).
-* **Telehealth Consultations**: Schedule and launch simulated face-to-face video calls.
-* **Interactive Profiles**: Comprehensive profiles highlighting experience metrics, clinical affiliations, active board certifications, and research focuses.
-* **Brand Harmonization**: Unified brand aesthetic utilizing the custom gradient SVG heartbeat pulse logo.
+---
 
-### 4. Dynamic Notification & Web Audio Chime System
-* **Real-time Simulation**: Built-in 10-second client-side simulator that showcases new patient events and alerts.
-* **Interactive Controls**: Dropdown panels allowing single-click dismissal, mark-as-read toggles, and "Mark all as read" controls.
-* **Synthesized Audio Chime**: Uses the browser's native **Web Audio API** to dynamically synthesize a warm, dual-frequency audio alert (frequency ramp from D5 to A5) whenever a new notification lands—eliminating dependency on heavy audio asset files.
+## 🏗️ Architecture
 
-### 5. Premium Styling & Design Tokens
-* **Glassmorphism**: Border treatments with translucent white overlays and high-radius blurs (`backdrop-blur-2xl`).
-* **Sleek Dark Mode**: Tailored dark backgrounds matching deep purple/indigo gradients for doctors and pink/rose gradients for patients.
-* **Shine Animations**: Dynamic hover styling including button shine highlights (`.shine-button`) and rotating DNA nodes.
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    🌐 Vercel Frontend                            │
+│                    Next.js 16  ·  React 19  ·  TypeScript        │
+└────────────────────────┬────────────────────────────────────────┘
+                         │
+          ┌──────────────┴──────────────┐
+          ▼                             ▼
+┌─────────────────────┐      ┌──────────────────────┐
+│  🚀 FastAPI Backend  │      │  🧪 Flask Backend     │
+│   Railway Service 1  │      │   Railway Service 2   │
+│                     │      │                       │
+│  ├─ XGBoost Models  │      │  ├─ Groq Llama 3.1    │
+│  ├─ SHAP Explainer  │      │  ├─ PyTorch DNN       │
+│  └─ Disease Risk    │      │  ├─ JWT Auth          │
+│     Prediction      │      │  ├─ ReportLab PDF     │
+└─────────────────────┘      │  └─ Vision OCR        │
+                             └──────────────────────┘
+```
+
+The monorepo is split into three services:
+
+| Service | Directory | Responsibility |
+|---------|-----------|---------------|
+| **Frontend** | `/` (root) | Next.js 16 dashboards for Patient, Doctor & Admin |
+| **FastAPI Backend** | `/backend` | XGBoost ML models + SHAP explainability engine |
+| **Flask Backend** | `/backend1` | AI intake chat, JWT auth, PDF generator, PyTorch DNN |
+
+---
+
+## ✨ Feature Highlights
+
+### 🎨 Premium UI Experience
+- Autoplaying background video with **glassmorphic layouts**
+- Silky smooth **micro-animations** throughout all dashboards
+- Three fully-featured portals: **Patient · Doctor · Admin**
+
+### 🤖 AppointReady AI Intake Assistant
+- Conversational terminal powered by **Groq `llama-3.1-8b-instant`**
+- Collects chief complaints, symptom duration, severity & medications
+- **Prescription Vision OCR** — uploads parsed into structured medicine arrays
+- Auto-generates polished **clinical intake PDFs** via ReportLab
+- Smart rule-based fallback if API rate limits are hit
+
+### 🧠 Explainable Machine Learning
+- **XGBoost classifiers** trained on 4 clinical datasets — Diabetes, Heart Disease, Kidney Disease, Liver Disease
+- Training pipeline uses SMOTE balancing + stratified cross-validation + median imputation
+- **True SHAP explanations** via `shap.TreeExplainer` — see exactly which biomarkers drive each prediction
+- **PyTorch DNN** — 4-layer deep neural network predicting risk from 8 biomarkers with gradient-based attribution
+
+### 🔐 Privacy-First by Design
+- ✅ **Zero patient data leakage** — OCR uploads saved as random UUIDs, deleted immediately after analysis
+- ✅ **PII Redaction** — raw OCR text never returned to the frontend
+- ✅ **In-memory processing** — sensitive data never persists
+
+### 🔔 Web Audio Notification System
+- Native browser **Web Audio API** synthesizes dual-frequency alerts (D5 → A5 ramp)
+- Zero external audio assets required — fully client-side
 
 ---
 
 ## 🛠️ Technology Stack
 
-* **Framework**: Next.js 16.2.6 (using React 19 and Turbopack)
-* **Styling**: Tailwind CSS 4.2.0 (configured with PostCSS)
-* **Icons**: Lucide React
-* **State & Context**: React Context APIs for unified user role sessions and notification states
-* **Language**: TypeScript
+<div align="center">
+
+| Layer | Technologies |
+|-------|-------------|
+| **Frontend** | Next.js 16.2.6 · React 19 · TypeScript · Tailwind CSS 4.2 · Recharts · Lucide React |
+| **FastAPI Backend** | FastAPI · Uvicorn · Scikit-Learn · XGBoost · SHAP · PyMuPDF · Pytesseract · Pillow |
+| **Flask Backend** | Flask · Flask-CORS · PyJWT · Groq SDK · ReportLab · PyTorch · NumPy · Pdfplumber |
+| **Infrastructure** | Vercel · Railway · Docker · GitHub CI/CD |
+
+</div>
 
 ---
 
-## 💻 Getting Started
+## 🚀 Getting Started Locally
 
 ### Prerequisites
 
-Make sure you have Node.js (version 18 or above) installed on your system.
+Before you begin, make sure you have:
 
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/koushik-ops/pulsekin.git
-   cd pulsekin
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Run the local development server:
-   ```bash
-   npm run dev
-   ```
-
-4. Open [http://localhost:3000](http://localhost:3000) in your web browser.
+- **Node.js** v18+ and `npm` / `pnpm`
+- **Python** 3.10+
+- **Tesseract OCR** — for vision & prescription parsing
+- **Poppler** — for PDF-to-image rendering
 
 ---
 
-## 📦 Build & Deployment
-
-To generate an optimized production bundle:
+### Step 1 — Frontend
 
 ```bash
-npm run build
+# From the repository root
+npm install
+
+# Configure environment
+cp .env.example .env.local
 ```
 
-The built pages will be generated inside the `.next` directory and can be launched locally using:
+Add to `.env.local`:
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+NEXT_PUBLIC_FLASK_API_URL=http://localhost:5000
+```
 
 ```bash
-npm run start
+npm run dev
+# → http://localhost:3000
 ```
+
+---
+
+### Step 2 — FastAPI Backend
+
+```bash
+cd backend
+
+# Create & activate virtual environment
+python -m venv venv
+source venv/bin/activate        # Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Train ML models (Diabetes, Heart, Kidney, Liver)
+python -m app.models.train_all_models
+
+# Start server
+uvicorn app.main:app --host 0.0.0.0 --port 8000
+# → http://localhost:8000
+```
+
+---
+
+### Step 3 — Flask Backend
+
+```bash
+cd ../backend1
+
+# Create & activate virtual environment
+python -m venv venv
+source venv/bin/activate        # Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
+Create `.env` in `/backend1`:
+```env
+GROQ_API_KEY=your_groq_api_key_here
+JWT_SECRET=pulsekin_hackathon_secret
+FLASK_PORT=5000
+```
+
+```bash
+python api.py
+# → http://localhost:5000
+```
+
+---
+
+## 📦 Deployment Guide
+
+### 🚂 Railway — Backend Microservices
+
+Both backends ship with custom `Dockerfile`s that handle system-level installs (`tesseract-ocr`, `poppler-utils`, `libgomp1`).
+
+**Deploy FastAPI Backend:**
+1. Create a Railway service linked to this repo
+2. Set root directory → `/backend`
+3. Expose port `8000`
+
+**Deploy Flask Backend:**
+1. Create a second Railway service (same repo)
+2. Set root directory → `/backend1`
+3. Add environment variables:
+   - `GROQ_API_KEY`
+   - `JWT_SECRET`
+   - `FRONTEND_URL` (your Vercel URL)
+   - `FLASK_PORT=5000`
+
+---
+
+### ▲ Vercel — Next.js Frontend
+
+1. Import this repository in Vercel
+2. Set root directory → `./`
+3. Add environment variables:
+   - `NEXT_PUBLIC_API_URL` — Railway FastAPI URL
+   - `NEXT_PUBLIC_FLASK_API_URL` — Railway Flask URL
+4. Click **Deploy** 🚀
+
+---
+
+## 🔒 Security & CORS
+
+- **FastAPI**: Wildcard origin setup by default (update `ALLOWED_ORIGINS` in `backend/app/main.py` for production)
+- **Flask**: Automatically whitelists the `FRONTEND_URL` environment variable for secure cross-origin requests
+
+---
+
+## 👥 Team
+
+<div align="center">
+
+Built with ❤️ by
+
+| | Name |
+|--|------|
+| 🧑‍💻 | **Nisha Sinha** |
+| 🧑‍💻 | **Koushik Deb** |
+| 🧑‍💻 | **Khushi Hatimuria** |
+
+</div>
+
+---
+
+<div align="center">
+
+**PulseKin** — *Where AI meets compassionate care.*
+
+⭐ Star this repo if you find it useful!
+
+</div>
