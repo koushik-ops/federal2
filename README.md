@@ -15,6 +15,14 @@
 
 <br/>
 
+### 🌐 Live Demo
+
+[![Live Demo](https://img.shields.io/badge/🚀%20Live%20Demo-federated--front.vercel.app-00C7B7?style=for-the-badge&logo=vercel&logoColor=white)](https://federated-front.vercel.app/)
+
+> **[https://federated-front.vercel.app/](https://federated-front.vercel.app/)**
+
+<br/>
+
 [![Next.js](https://img.shields.io/badge/Next.js-16.2.6-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![Flask](https://img.shields.io/badge/Flask-Backend-000000?style=for-the-badge&logo=flask)](https://flask.palletsprojects.com/)
@@ -28,6 +36,12 @@
 [![Railway](https://img.shields.io/badge/Backends_on-Railway-6441A4?style=flat-square&logo=railway)](https://railway.app/)
 [![Docker](https://img.shields.io/badge/Containerized-Docker-2496ED?style=flat-square&logo=docker)](https://www.docker.com/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
+
+<br/>
+
+### 🌐 [**→ View Live Demo**](https://vercel.com/koushik-ops-projects/federated-front/HptkmUWfiEXihXCxCJ5Ugzs3cBTZ)
+
+[![Live Demo](https://img.shields.io/badge/🚀%20LIVE%20DEMO-Click%20to%20Open-brightgreen?style=for-the-badge)](https://vercel.com/koushik-ops-projects/federated-front/HptkmUWfiEXihXCxCJ5Ugzs3cBTZ)
 
 </div>
 
