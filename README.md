@@ -104,6 +104,165 @@ The monorepo is split into three services:
 
 ---
 
+## 🧬 Algorithms & AI Models
+
+This section is a deep-dive into every algorithm powering PulseKin — written so judges and contributors can understand the **why** behind each technical choice.
+
+---
+
+### 1. 🌲 XGBoost — Tabular Disease Classification
+
+> **Used for:** Diabetes · Heart Disease · Kidney Disease · Liver Disease prediction
+
+**XGBoost (Extreme Gradient Boosting)** is an ensemble learning algorithm that builds a sequence of decision trees, where each tree corrects the residual errors of the previous one using **gradient descent in function space**.
+
+```
+Input Features (clinical biomarkers)
+        ↓
+  Tree 1 → residual errors
+        ↓
+  Tree 2 → corrects Tree 1's errors
+        ↓
+        ...
+  Tree N → final ensemble prediction
+        ↓
+  Sigmoid → Binary Risk Score (0–1)
+```
+
+**Why XGBoost for medical data?**
+- Handles **missing clinical values** gracefully via built-in sparse-aware split finding
+- Resistant to overfitting on **small clinical datasets** via regularization (L1 + L2)
+- Naturally produces **feature importance scores** used by SHAP
+
+**Training Pipeline:**
+| Step | Technique | Purpose |
+|------|-----------|---------|
+| Class imbalance | **SMOTE** (Synthetic Minority Oversampling) | Prevents model bias toward healthy class |
+| Validation | **Stratified K-Fold Cross-Validation** | Ensures balanced class distribution per fold |
+| Imputation | **Median Imputation** | Handles missing lab values without data leakage |
+| Threshold | Custom probability cutoff | Optimized for clinical sensitivity |
+
+---
+
+### 2. 🔍 SHAP — Explainable AI (Local Feature Attribution)
+
+> **Used for:** Per-prediction explanation on all 4 XGBoost disease models
+
+**SHAP (SHapley Additive exPlanations)** is rooted in **cooperative game theory**. Each feature is treated as a "player" and its contribution to the final prediction is computed as the average marginal contribution across all possible feature orderings (Shapley values).
+
+```
+Prediction = base_value
+           + φ(glucose)       ← pushes risk UP   ↑
+           + φ(BMI)           ← pushes risk UP   ↑
+           + φ(age)           ← neutral          →
+           + φ(blood_pressure)← pushes risk DOWN  ↓
+           + ...
+```
+
+**`shap.TreeExplainer`** is used (not the slower KernelExplainer) because it exploits the tree structure of XGBoost for **exact, O(TLD) computation** — fast enough for real-time clinical inference.
+
+**What the Doctor sees:**
+- 🔴 Red bars — features pushing the risk score **higher**
+- 🔵 Blue bars — features pushing the risk score **lower**
+- Magnitude = strength of influence on this specific patient
+
+---
+
+### 3. 🧠 PyTorch Deep Neural Network — Biomarker Risk Scoring
+
+> **Used for:** Real-time disease risk prediction from 8 core biomarkers in the Flask backend
+
+A custom **4-layer fully-connected DNN** trained on normalized biomarker data.
+
+```
+Input Layer      →  8 biomarkers (glucose, BP, BMI, age, etc.)
+                         ↓
+Hidden Layer 1   →  64 neurons  +  ReLU  +  BatchNorm  +  Dropout(0.3)
+                         ↓
+Hidden Layer 2   →  32 neurons  +  ReLU  +  BatchNorm  +  Dropout(0.2)
+                         ↓
+Hidden Layer 3   →  16 neurons  +  ReLU
+                         ↓
+Output Layer     →  1 neuron  +  Sigmoid  →  Risk probability [0, 1]
+```
+
+**Design choices:**
+- **ReLU activations** — avoids vanishing gradient on deep layers
+- **BatchNormalization** — stabilizes training on small medical datasets
+- **Dropout regularization** — prevents overfitting on limited patient samples
+- **Sigmoid output** — calibrated probability score for clinical risk communication
+
+**Attribution method:** Gradient × Input — computes how sensitive the output is to each input feature, giving per-patient biomarker attribution without a separate explainer library.
+
+---
+
+### 4. 🦙 Groq LLM (Llama 3.1) — Conversational AI Intake
+
+> **Used for:** AppointReady patient intake terminal + prescription parsing
+
+**Model:** `llama-3.1-8b-instant` via Groq's ultra-low-latency inference API
+
+The intake flow uses a **multi-turn structured prompting** strategy:
+
+```
+System Prompt: Clinical intake specialist persona
+      ↓
+Turn 1: Chief complaint elicitation
+      ↓
+Turn 2: Duration & severity probing
+      ↓
+Turn 3: Current medications & allergies
+      ↓
+Turn 4: Structured JSON summary extraction
+      ↓
+ReportLab → Clinical PDF Report
+```
+
+**Prescription Vision OCR pipeline:**
+```
+User uploads image
+      ↓
+Groq Vision model (multimodal) → raw text extraction
+      ↓
+Structured parsing → medicine name · dosage · frequency array
+      ↓
+In-memory only — never persisted or returned as raw text
+```
+
+**Fallback strategy:** Rule-based handlers activate automatically if Groq rate limits are hit, ensuring **zero downtime** for patient intake sessions.
+
+---
+
+### 5. 🎵 Web Audio API — Frequency Synthesis
+
+> **Used for:** Clinical alert notifications
+
+Instead of loading audio files, PulseKin dynamically **synthesizes sound** in the browser:
+
+```javascript
+// Dual-frequency alert: D5 (587 Hz) ramping to A5 (880 Hz)
+OscillatorNode → frequency.linearRampToValueAtTime(880, t + 0.5)
+GainNode       → exponentialRampToValueAtTime(0.001, t + 1.0)
+```
+
+This eliminates network requests for audio assets and works entirely offline.
+
+---
+
+### 📊 Algorithm Summary for Judges
+
+| Algorithm | Type | Task | Key Strength |
+|-----------|------|------|-------------|
+| **XGBoost** | Gradient Boosted Trees | Disease classification | Handles clinical imbalance, fast inference |
+| **SHAP TreeExplainer** | Game-theoretic attribution | Model explainability | Exact, per-prediction feature importance |
+| **PyTorch DNN (4-layer)** | Deep Neural Network | Biomarker risk scoring | End-to-end learnable, gradient attribution |
+| **Llama 3.1 (Groq)** | Large Language Model | Patient intake & OCR | Sub-second inference, structured extraction |
+| **SMOTE** | Synthetic oversampling | Training data balancing | Prevents false-negative bias in rare diseases |
+| **Stratified K-Fold CV** | Model validation | Generalization testing | Prevents data leakage in small datasets |
+| **Web Audio Synthesis** | Signal processing | Alert notifications | Zero-dependency audio, works offline |
+
+---
+
 ## 🛠️ Technology Stack
 
 <div align="center">
