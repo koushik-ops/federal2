@@ -22,8 +22,13 @@ groq_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 print("API FILE EXECUTING")
 
 app = Flask(__name__)
-# Enable CORS for Next.js ports 3000 and 3001
-CORS(app, origins=["http://localhost:3000", "http://localhost:3001"])
+# Enable CORS for Next.js local development and deployed frontend
+frontend_origins = ["http://localhost:3000", "http://localhost:3001"]
+prod_origin = os.getenv("FRONTEND_URL")
+if prod_origin:
+    frontend_origins.append(prod_origin)
+    frontend_origins.append(prod_origin.rstrip("/"))
+CORS(app, origins=frontend_origins)
 
 JWT_SECRET = os.getenv("JWT_SECRET", "pulsekin_hackathon_secret")
 JWT_EXPIRY_HOURS = 24
@@ -821,8 +826,8 @@ if __name__ == "__main__":
     print("[OK] Doctor login:  APOLLO_CHENNAI / DR_001 / demo123")
     print("[OK] Admin login:   tech_admin / PULSEKIN_2024")
     app.run(
-    host="0.0.0.0",
-    port=int(os.getenv("FLASK_PORT", 5000)),
-    debug=True,
-    use_reloader=False
-)
+        host="0.0.0.0",
+        port=int(os.getenv("FLASK_PORT", os.getenv("PORT", 5000))),
+        debug=True,
+        use_reloader=False
+    )
